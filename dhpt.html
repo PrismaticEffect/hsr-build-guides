@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DHPT - Character Details</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0b0d1a;
+      color: #e0e0f0;
+      display: flex;
+      min-height: 100vh;
+    }
+    .main {
+      margin-left: 0px;
+      flex: 1;
+      padding: 32px 36px;
+      max-width: 1400px;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: #14163a;
+      color: #a0a0c0;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 28px;
+      text-decoration: none;
+    }
+    .back-btn:hover { border-color: #6a5acd; color: #e0e0f0; }
+    .wiki-top {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+    .left-col { display: flex; flex-direction: column; gap: 20px; }
+    .char-portrait {
+      width: 280px;
+      aspect-ratio: 1 / 1.15;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(160deg, #2a1a4a 0%, #1a1040 50%, #301a50 100%);
+    }
+    .char-portrait img { width: 100%; height: 100%; object-fit: cover; }
+    .info-box {
+      background: #12142e;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .info-box-header {
+      background: linear-gradient(135deg, #1e1a45, #2a2060);
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #c0c0f0;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-label { color: #8888aa; font-weight: 500; }
+    .info-value {
+      color: #d0d0f0;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .info-value img { width: 20px; height: 20px; border-radius: 4px; }
+    .stars { color: #f0c040; letter-spacing: 1px; }
+    .right-col { display: flex; flex-direction: column; }
+    .char-name-block { margin-bottom: 8px; }
+    .char-name-block h1 {
+      font-size: 36px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .char-name-block .subtitle {
+      font-size: 14px;
+      color: #8888aa;
+      font-style: italic;
+    }
+    .char-stars-lg {
+      font-size: 20px;
+      color: #f0c040;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+    .description-box {
+      background: #12142e;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 24px;
+      flex: 1;
+    }
+    .description-box h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #c0b0f0;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .description-box p {
+      font-size: 14px;
+      line-height: 1.75;
+      color: #b0b0d0;
+    }
+    .description-box p + p { margin-top: 12px; }
+    .wiki-sections {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .wiki-section-full { margin-bottom: 20px; }
+    .section-card {
+      background: #12142e;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .section-card:hover { border-color: rgba(106,90,205,0.3); }
+    .section-header {
+      background: linear-gradient(135deg, #1e1a45, #2a2060);
+      padding: 14px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #c0c0f0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-header .icon {
+      width: 20px; height: 20px;
+      border-radius: 6px;
+      background: rgba(106,90,205,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+    }
+    .section-body { padding: 20px; }
+    .section-body p {
+      font-size: 13px;
+      line-height: 1.7;
+      color: #a0a0c0;
+    }
+    .section-body h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d0c8f0;
+      margin-bottom: 8px;
+    }
+    .trace-list { list-style: none; }
+    .trace-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px;
+      color: #a0a0c0;
+      display: flex;
+      justify-content: space-between;
+    }
+    .trace-list li:last-child { border-bottom: none; }
+    .trace-val { color: #d0c8f0; font-weight: 500; }
+    .stat-section-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8888aa;
+      margin-bottom: 8px;
+      margin-top: 16px;
+    }
+    .stat-section-label:first-child { margin-top: 0; }
+    .stat-toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .stat-toggle-btn {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      border-radius: 11px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: #1a1d45;
+      cursor: pointer;
+      transition: background 0.25s, border-color 0.25s;
+      flex-shrink: 0;
+    }
+    .stat-toggle-btn.active {
+      background: linear-gradient(135deg, #3b2f7a, #5a3fa0);
+      border-color: #6a5acd;
+    }
+    .stat-toggle-btn::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #a0a0c0;
+      transition: transform 0.25s, background 0.25s;
+    }
+    .stat-toggle-btn.active::after {
+      transform: translateX(18px);
+      background: #fff;
+    }
+    .stat-toggle-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #a0a0c0;
+      transition: color 0.25s;
+      user-select: none;
+    }
+    .stat-toggle-label.active-label { color: #d0c8f0; }
+    .stat-panel { position: relative; }
+    .stat-table { transition: opacity 0.3s ease; }
+    .stat-table.hidden { display: none; }
+    .stat-table.fading-out { opacity: 0; }
+    .stat-table.fading-in { opacity: 0; }
+    .rec-entry { margin-bottom: 16px; }
+    .rec-entry:last-child { margin-bottom: 0; }
+    .rec-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d0c8f0;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .rec-tag {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: rgba(106,90,205,0.2);
+      color: #a090d0;
+    }
+    .rec-tag.bis {
+      background: rgba(240,192,64,0.15);
+      color: #f0c040;
+    }
+    .rec-desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #9090b0;
+    }
+    .mainstat-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .mainstat-list li {
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px;
+      color: #a0a0c0;
+    }
+    .mainstat-list li:last-child { border-bottom: none; }
+    .mainstat-slot {
+      font-weight: 600;
+      color: #8888aa;
+    }
+    .mainstat-val {
+      color: #d0c8f0;
+      font-weight: 500;
+    }
+    .priority-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .priority-item:last-child { border-bottom: none; }
+    .priority-rank {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .priority-rank.rank-1 { background: rgba(240,192,64,0.2); color: #f0c040; }
+    .priority-rank.rank-2 { background: rgba(192,192,210,0.15); color: #c0c0d2; }
+    .priority-rank.rank-3 { background: rgba(180,130,80,0.15); color: #b4824f; }
+    .priority-rank.rank-4 { background: rgba(140,140,170,0.1); color: #8c8caa; }
+    .priority-info { flex: 1; }
+    .priority-type {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #7a6ae0;
+      margin-bottom: 2px;
+    }
+    .priority-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d0c8f0;
+    }
+    .priority-note {
+      font-size: 12px;
+      color: #8888aa;
+      margin-top: 2px;
+    }
+    .team-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .team-row:last-child { margin-bottom: 0; }
+    .team-block {
+      flex: 1;
+      min-width: 280px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .team-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8888aa;
+      margin-bottom: 12px;
+    }
+    .team-slots { display: flex; gap: 12px; }
+    .team-slot { flex: 1; text-align: center; }
+    .team-slot-icon {
+      width: 56px; height: 56px;
+      border-radius: 12px;
+      margin: 0 auto 6px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(255,255,255,0.08);
+      overflow: hidden;
+      background: #1a1d45;
+      position: relative;
+    }
+    .team-slot-icon img { width: 100%; height: 100%; object-fit: cover; }
+    .team-slot-icon img.alt-icon {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+    .team-slot-icon img.alt-icon:first-child {
+      animation: flashA 2s infinite;
+    }
+    .team-slot-icon img.alt-icon:nth-child(2) {
+      animation: flashB 2s infinite;
+    }
+    @keyframes flashA {
+      0%, 45%   { opacity: 1; }
+      50%, 95%  { opacity: 0; }
+      100%      { opacity: 1; }
+    }
+    @keyframes flashB {
+      0%, 45%   { opacity: 0; }
+      50%, 95%  { opacity: 1; }
+      100%      { opacity: 0; }
+    }
+    .team-slot-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: #d0c8f0;
+    }
+    .team-slot-role {
+      font-size: 10px;
+      color: #7a7ca0;
+      margin-top: 1px;
+    }
+    .team-note {
+      font-size: 12px;
+      color: #8888aa;
+      margin-top: 12px;
+      line-height: 1.5;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    .invest-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .invest-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .invest-card-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #8888aa;
+      margin-bottom: 8px;
+    }
+    .invest-card-value {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .invest-card-note {
+      font-size: 11px;
+      color: #7a7ca0;
+    }
+    .grade-s { color: #f0c040; }
+    .grade-a { color: #60d080; }
+    .grade-b { color: #60a0e0; }
+    .invest-summary {
+      padding: 16px;
+      background: rgba(106,90,205,0.06);
+      border: 1px solid rgba(106,90,205,0.12);
+      border-radius: 10px;
+    }
+    .invest-summary h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #c0b0f0;
+      margin-bottom: 8px;
+    }
+    .invest-summary p {
+      font-size: 13px;
+      line-height: 1.7;
+      color: #a0a0c0;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #2a2d5a; border-radius: 3px; }
+    @media (max-width: 1000px) {
+      .wiki-top { grid-template-columns: 1fr; }
+      .char-portrait { width: 220px; }
+      .wiki-sections { grid-template-columns: 1fr; }
+      .invest-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .main { padding: 16px; }
+      .char-portrait { width: 180px; }
+      .invest-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main">
+    <a href="https://akaerya.github.io/" class="back-btn">← Back to Characters</a>
+
+    <div class="wiki-top">
+      <div class="left-col">
+        <div class="char-portrait">
+          <img src="/images/character/dhpt.webp" alt="DHPT">
+        </div>
+        <div class="info-box">
+          <div class="info-box-header">Character Info</div>
+          <div class="info-row">
+            <span class="info-label">Rarity</span>
+            <span class="info-value stars">★★★★★</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Path</span>
+            <span class="info-value">
+              <img src="/images/preservation.webp" alt="Preservation"> Preservation
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Element</span>
+            <span class="info-value">
+              <img src="/images/physical.webp" alt="Physical"> Physical
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Faction</span>
+            <span class="info-value">Chrysos Heirs</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">World</span>
+            <span class="info-value">Amphoreus</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-col">
+        <div class="char-name-block">
+          <h1>DHPT</h1>
+          <div class="subtitle">"As you can see, that transformation was brought about by the power of the Permanence. Though you may have many questions, I'd like to reintroduce myself before I answer them — I am the Guard of the Astral Express, your companion, Dan Heng the Nameless."</div>
+        </div>
+        <div class="char-stars-lg">★★★★★</div>
+        <div class="description-box" style="margin-bottom: 16px;">
+          <h3>Character Summary</h3>
+          <p>Dan Heng Permansor Terrae (or DHPT for short) is an ATK-scaling shielder. In his base kit, he assigns an ally as a Bondmate and provides an ATK buff proportionate to his ATK. DHPT also gives the Bondmate a summon named Souldragon, which can occasionally deal damage based on the Bondmate's stats. Souldragon also provides shields (DHPT's passive way of providing shields) and cleanses negative statuses from allies.</p>
+          <p>Since DHPT provides a summon, he synergises well with Sunday, who gives an additional 50% DMG to units with summons, and enables DPSes to wear the BananAmusement Park planar, which is often comparably good to BiS choices for many DPSes, if not better than other alternatives.</p>
+        </div>
+        <div class="description-box">
+          <h3>Build Notes</h3>
+          <p>ATK: Specific ATK recommendations for other LCs will be provided in the recommended LCs section.</p>
+          <p>SPD: 160+ SPD Is more recommended for teams that want better SP generation (Archer) or high attack frequency (DoT). If you do not need the SP or attack frequency (e.g. Phainon teams), you can go for 142.86 SPD instead, or 133.34 SPD with ATK boots.</p>
+          <p>Rope: Use ATK rope if you are using him as a sustain for Phainon teams, though you should ideally not be using a sustain with Phainon in the first place.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="wiki-sections">
+
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">✦</span> Recommended Stats (out of combat)
+        </div>
+        <div class="section-body">
+          <div class="stat-toggle-wrap">
+            <div class="stat-toggle-btn" id="statToggle" onclick="toggleStats()"></div>
+            <span class="stat-toggle-label active-label" id="statToggleLabel">E0S0</span>
+          </div>
+
+          <div class="stat-panel" id="statPanel">
+            <div class="stat-table" id="statsE0S0">
+              <div class="stat-section-label"><b>E0S0 (582 Base ATK Cone)</b></div>
+              <ul class="trace-list">
+                <li><span>ATK</span> <span class="trace-val">3300+</span></li>
+                <li><span>SPD</span> <span class="trace-val">142.86+ / 160+</span></li>
+              </ul>
+            </div>
+
+            <div class="stat-table hidden" id="statsE0S1">
+              <div class="stat-section-label"><b>5* E0S1 (Signature LC)</b></div>
+              <ul class="trace-list">
+                <li><span>ATK</span> <span class="trace-val">4050+</span></li>
+                <li><span>SPD</span> <span class="trace-val">142.86+ / 160+</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="stat-section-label"><b>Mainstat Priority</b></div>
+          <ul class="mainstat-list" id="mainstatList">
+                <li><span class="mainstat-slot">Body:</span> <span class="mainstat-val">ATK</span></li>
+                <li><span class="mainstat-slot">Boots:</span> <span class="mainstat-val">SPD or ATK</span></li>
+                <li><span class="mainstat-slot">Sphere:</span> <span class="mainstat-val">ATK</span></li>
+                <li><span class="mainstat-slot">Rope:</span> <span class="mainstat-val">ERR or ATK</span></li>
+          </ul>
+          <div class="stat-section-label" style="margin-top:12px;"><b>Substat Priority</b></div>
+          <div class="rec-desc">ATK = SPD</div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">◈</span> Recommended Light Cones / Relic Sets
+        </div>
+        <div class="section-body">
+          <h4>Light Cones</h4>
+          <div class="rec-entry">
+            <div class="rec-name">Though Worlds Apart S1 <span class="rec-tag bis">BiS</span></div>
+            <div class="rec-desc">His signature LC and his unconditional best LC. Provides a notable ATK boost (the only Preservation LC to do this), a small DMG% buff to all allies (a higher one for his Bondmate), and emergency healing on Ultimate use.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Journey Forever Peaceful S3-S5 <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">BP LC which provides shield strength and an unconditional DMG% buff to all allies. It is most recommended to use this cone only at S3 or higher, which is where shielding is comparable to 635 base ATK cones. At S1-S2 level, shielding is only comparable to 582 ATK base cones if not worse. If you do not care about shield strength, however, this is DHPT's strongest offensive option other than his S1.
+
+Aim for 2800 ATK with this cone. </div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">635 Base ATK LC <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Any LC with 635 or more base ATK (of any path), which is reserved for certain premium DPS lightcones. Aim for 3450+ ATK.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">582 Base ATK LC <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Any LC with 582 or more base ATK (of any path), which can be found through standard 5* lightcones such as Welt's or Yanqing's.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Moment of Victory S1 <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Niche option for DoT teams since this LC provides EHR, which synergises well with Kafka's 100% ATK boost to DHPT if you hit 75% EHR. This makes this LC stronger than a 635 base ATK LC for DoT only. Outside of DoT, this LC is worse than a 582 base ATK LC. If you use this build, use an EHR body and aim for 75% EHR, 160 SPD and 2450+ ATK out of combat.</div>
+          </div>
+
+          <h4 style="margin-top:20px;">Relic Sets</h4>
+          <div class="rec-entry">
+            <div class="rec-name">Self-Enshrouded Recluse <span class="rec-tag bis">BiS</span></div>
+            <div class="rec-desc">His best set for shielding as it provides a 22% increase to shield strength while also providing a 15% CD boost to all allies. General best set for most teams.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">2pc SPD / 2pc SPD <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">His best set for general SP generation as it provides the highest SPD increase out of all relic combinations at E0S0. Best suited for Archer and DoT teams.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Sacerdos' Relived Ordeal <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">His Skill counts as a buff to a single target, so if you have the SP to use, DHPT can theoretically wear this set to provide your hypercarry DPS a bit of CD. This is best used if your DPS is paired with Sparkle/RMC rather than Sunday (or no advancers at all), or is able to freeze buff duration (like Phainon).</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Warrior Goddess of Sun and Thunder <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">His best set for SP generation at S1 level only. Since his LC heals, he can activate the +6% SPD effect and provide 15% CD to all allies, making it on par with Recluse 4pc, but with more SPD instead of stronger shielding. Best suited for Archer teams.</div>
+          </div>
+
+          <h4 style="margin-top:20px;">Planar Ornaments</h4>
+          <div class="rec-entry">
+            <div class="rec-name">Lushaka, the Sunken Seas <span class="rec-tag bis">BiS</span></div>
+            <div class="rec-desc">Most all-rounded planar for DHPT. Gives a bit of ERR% to DHPT and provides an ally with 12% ATK.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">City of Converging Stars <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">The best offensive planar for DHPT if you don't need ERR from a planar. Gives a bit of ATK to DHPT and provides the team with a bit of CD when there is an enemy.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Sprightly Vonwacq <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Provides a bit of ERR% to DHPT though the action advance is not very useful unless you have a low SPD DHPT yet you want DHPT to act 3 times in wave 1. Most recommended if you want DHPT to act first in the team (like in DoT teams).</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Penacony, the Land of Dreams <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Provides a bit of ERR% and a bit of DMG% for Physical DPSes like Phainon. Good planar for Physical-based DPSes.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">⚙</span> Trace Priority
+        </div>
+        <div class="section-body">
+          <h4>Character Traces</h4>
+          <div class="priority-item">
+            <div class="priority-rank rank-1">1</div>
+            <div class="priority-info">
+              <div class="priority-type">Talent</div>
+              <div class="priority-name" data-trace-type="Talent">Of Virtue, Forms Unfold</div>
+              <div class="priority-note">Primary shielding source. High priority.</div>
+            </div>
+          </div>
+          <div class="priority-item">
+            <div class="priority-rank rank-1">1</div>
+            <div class="priority-info">
+              <div class="priority-type">Skill</div>
+              <div class="priority-name" data-trace-type="Skill">Terra Omnibus</div>
+              <div class="priority-note">Determines the maximum Shield DHPT can deploy overall and an optional source of shielding. High priority.</div>
+            </div>
+          </div>
+          <div class="priority-item">
+            <div class="priority-rank rank-1">1</div>
+            <div class="priority-info">
+              <div class="priority-type">Ultimate</div>
+              <div class="priority-name" data-trace-type="Ultimate">A Dragon's Zenith Knows No Rue</div>
+              <div class="priority-note">Secondary shielding source and affects how much damage Souldragon can do. High priority.</div>
+            </div>
+          </div>
+          <div class="priority-item">
+            <div class="priority-rank rank-4">4</div>
+            <div class="priority-info">
+              <div class="priority-type">Basic ATK</div>
+              <div class="priority-name" data-trace-type="Basic ATK">Aegis Vitae</div>
+              <div class="priority-note">Used just for SP generation with little to no damage contribution. Low priority.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="wiki-section-full">
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">👥</span> Team Suggestions
+        </div>
+        <div class="section-body">
+          <div class="team-row">
+            <div class="team-block">
+              <div class="team-label">Archer Hypercarry</div>
+              <div class="team-slots">
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Archer_Icon.webp" alt="Archer"></div>
+                  <div class="team-slot-name">Archer</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Sparkle_Icon.webp" alt="Sparkle"></div>
+                  <div class="team-slot-name">Sparkle</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Cipher_Icon.webp" alt="Cipher"></div>
+                  <div class="team-slot-name">Cipher</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_DHPT_Icon.webp" alt="DHPT"></div>
+                  <div class="team-slot-name">DHPT</div>
+                  <div class="team-slot-role">Sustain</div>
+                </div>
+              </div>
+              <div class="team-note">Easiest to play Archer team composition with a high damage floor. Sparkle, Cipher and DHPT should all be above 160 SPD, with Cipher and DHPT preferably outspeeding Sparkle. DHPT can be played entirely SP positive here without compromising on sustain too much, and Archer provides a lot of energy to DHPT through his multiple attacks. DHPT should be built fast here.</div>
+            </div>
+            <div class="team-block">
+              <div class="team-label">Ashveil Hypercarry</div>
+              <div class="team-slots">
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Ashveil_Icon.webp" alt="Ashveil"></div>
+                  <div class="team-slot-name">Ashveil</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon">
+                    <img class="alt-icon" src="/images/small/Character_Sparkle_Icon.webp" alt="Sparkle">
+                    <img class="alt-icon" src="/images/small/Character_Sunday_Icon.webp" alt="Sunday">
+                  </div>
+                  <div class="team-slot-name">Sparkle/Sunday</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Tribbie_Icon.webp" alt="Tribbie"></div>
+                  <div class="team-slot-name">Tribbie</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_DHPT_Icon.webp" alt="DHPT"></div>
+                  <div class="team-slot-name">DHPT</div>
+                  <div class="team-slot-role">Sustain</div>
+                </div>
+              </div>
+              <div class="team-note">Standard Ashveil hypercarry team, with DHPT being able to provide notable attack frequency alongside Tribbie. Ashveil also benefits from Sunday's 50% DMG boost from his secondary effect of his Skill when paired with DHPT, since DHPT provides Ashveil with a summon.</div>
+            </div>
+          </div>
+          <div class="team-row">
+            <div class="team-block">
+              <div class="team-label">Triple DoT</div>
+              <div class="team-slots">
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Black_Swan_Icon.webp" alt="Black Swan"></div>
+                  <div class="team-slot-name">Black Swan</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Hysilens_Icon.webp" alt="Hysilens"></div>
+                  <div class="team-slot-name">Hysilens</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Kafka_Icon.webp" alt="Kafka"></div>
+                  <div class="team-slot-name">Kafka</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_DHPT_Icon.webp" alt="DHPT"></div>
+                  <div class="team-slot-name">DHPT</div>
+                  <div class="team-slot-role">Sustain</div>
+                </div>
+              </div>
+              <div class="team-note">While DHPT's Souldragon does not do much damage here (there are no crit stats on Hysilens or Swan), a high speed DHPT can be used to provide frequent attacks and SP for the team, which can be used to trigger Kafka's FUAs and provide SP for both Kafka and Hysilens. You would normally assign Swan or Hysilens as the Bondmate for best damage, but you can assign Kafka as the Bondmate for better shielding.</div>
+            </div>
+            <div class="team-block">
+              <div class="team-label">Anaxa Hypercarry</div>
+              <div class="team-slots">
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Anaxa_Icon.webp" alt="Anaxa"></div>
+                  <div class="team-slot-name">Anaxa</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Cyrene_Icon.webp" alt="Cyrene"></div>
+                  <div class="team-slot-name">Cyrene</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Cerydra_Icon.webp" alt="Cerydra"></div>
+                  <div class="team-slot-name">Cerydra</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_DHPT_Icon.webp" alt="DHPT"></div>
+                  <div class="team-slot-name">DHPT</div>
+                  <div class="team-slot-role">Sustain</div>
+                </div>
+              </div>
+              <div class="team-note">DHPT provides well-needed SP for the team since Cerydra and Anaxa should be spamming Skills with this setup, and Anaxa also gives a good amount of energy to DHPT due to his overall attack frequency with Cyrene + Cerydra.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="wiki-section-full">
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">📊</span> Vertical Investment Analysis
+        </div>
+        <div class="section-body">
+          <div class="invest-grid">
+            <div class="invest-card">
+              <div class="invest-card-label">Sig LC (S1)</div>
+              <div class="invest-card-value grade-b">★★</div>
+              <div class="invest-card-note">10-12% damage increase for a hypercarry with decent sustain ability. Damage improvement is lower in a multi-DPS team like DoT.</div>
+            </div>
+            <div class="invest-card">
+              <div class="invest-card-label">Teammates</div>
+              <div class="invest-card-value grade-s">★★★★</div>
+              <div class="invest-card-note">Most DPSes and supports should have better vertical investment than DHPT.</div>
+            </div>
+            <div class="invest-card">
+              <div class="invest-card-label">E1</div>
+              <div class="invest-card-value grade-a">★★★</div>
+              <div class="invest-card-note">An 18% damage increase minimum, and the extra SP can be useful for SP-hungry teams like Archer.</div>
+            </div>
+            <div class="invest-card">
+              <div class="invest-card-label">E2</div>
+              <div class="invest-card-value grade-s">★★★★</div>
+              <div class="invest-card-note">15-20% damage improvement, can be higher with DPSes with more notable self-buffs. Makes DHPT an extremely strong sustain.</div>
+            </div>
+          </div>
+
+          <div class="invest-summary">
+            <h4>Investment Recommendation</h4>
+            <p>E0S0 is already decently strong as a sustain. If you want to make DHPT a better sustain, aim for E0S1 (or E2S0 if you have the funds). E1S0 is also good and quite strong for Archer teams. Outside of that, you are usually better off investing into your DPSes or supports more. Refer to specific characters' investment recommendations for more information.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let showingE0S1 = false;
+    function toggleStats() {
+      const toggle = document.getElementById('statToggle');
+      const label = document.getElementById('statToggleLabel');
+      const current = showingE0S1 ? document.getElementById('statsE0S1') : document.getElementById('statsE0S0');
+      const next = showingE0S1 ? document.getElementById('statsE0S0') : document.getElementById('statsE0S1');
+      showingE0S1 = !showingE0S1;
+      toggle.classList.toggle('active', showingE0S1);
+      label.textContent = showingE0S1 ? '5* E0S1 / 4* E6S5' : 'E0S0';
+      current.classList.add('fading-out');
+      setTimeout(() => {
+        current.classList.add('hidden');
+        current.classList.remove('fading-out');
+        next.classList.remove('hidden');
+        next.classList.add('fading-in');
+        void next.offsetWidth;
+        next.classList.remove('fading-in');
+      }, 300);
+    }
+  </script>
+</body>
+</html>

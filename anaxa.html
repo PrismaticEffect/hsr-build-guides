@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anaxa - Character Details</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0b0d1a;
+      color: #e0e0f0;
+      display: flex;
+      min-height: 100vh;
+    }
+    .main {
+      margin-left: 0px;
+      flex: 1;
+      padding: 32px 36px;
+      max-width: 1400px;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: #14163a;
+      color: #a0a0c0;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 28px;
+      text-decoration: none;
+    }
+    .back-btn:hover { border-color: #6a5acd; color: #e0e0f0; }
+    .wiki-top {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+    .left-col { display: flex; flex-direction: column; gap: 20px; }
+    .char-portrait {
+      width: 280px;
+      aspect-ratio: 1 / 1.15;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(160deg, #2a1a4a 0%, #1a1040 50%, #301a50 100%);
+    }
+    .char-portrait img { width: 100%; height: 100%; object-fit: cover; }
+    .info-box {
+      background: #12142e;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .info-box-header {
+      background: linear-gradient(135deg, #1e1a45, #2a2060);
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #c0c0f0;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-label { color: #8888aa; font-weight: 500; }
+    .info-value {
+      color: #d0d0f0;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .info-value img { width: 20px; height: 20px; border-radius: 4px; }
+    .stars { color: #f0c040; letter-spacing: 1px; }
+    .right-col { display: flex; flex-direction: column; }
+    .char-name-block { margin-bottom: 8px; }
+    .char-name-block h1 {
+      font-size: 36px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .char-name-block .subtitle {
+      font-size: 14px;
+      color: #8888aa;
+      font-style: italic;
+    }
+    .char-stars-lg {
+      font-size: 20px;
+      color: #f0c040;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+    .description-box {
+      background: #12142e;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 24px;
+      flex: 1;
+    }
+    .description-box h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #c0b0f0;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .description-box p {
+      font-size: 14px;
+      line-height: 1.75;
+      color: #b0b0d0;
+    }
+    .description-box p + p { margin-top: 12px; }
+    .wiki-sections {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .wiki-section-full { margin-bottom: 20px; }
+    .section-card {
+      background: #12142e;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .section-card:hover { border-color: rgba(106,90,205,0.3); }
+    .section-header {
+      background: linear-gradient(135deg, #1e1a45, #2a2060);
+      padding: 14px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #c0c0f0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-header .icon {
+      width: 20px; height: 20px;
+      border-radius: 6px;
+      background: rgba(106,90,205,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+    }
+    .section-body { padding: 20px; }
+    .section-body p {
+      font-size: 13px;
+      line-height: 1.7;
+      color: #a0a0c0;
+    }
+    .section-body h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d0c8f0;
+      margin-bottom: 8px;
+    }
+    .trace-list { list-style: none; }
+    .trace-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px;
+      color: #a0a0c0;
+      display: flex;
+      justify-content: space-between;
+    }
+    .trace-list li:last-child { border-bottom: none; }
+    .trace-val { color: #d0c8f0; font-weight: 500; }
+    .stat-section-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8888aa;
+      margin-bottom: 8px;
+      margin-top: 16px;
+    }
+    .stat-section-label:first-child { margin-top: 0; }
+    .stat-toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .stat-toggle-btn {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      border-radius: 11px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: #1a1d45;
+      cursor: pointer;
+      transition: background 0.25s, border-color 0.25s;
+      flex-shrink: 0;
+    }
+    .stat-toggle-btn.active {
+      background: linear-gradient(135deg, #3b2f7a, #5a3fa0);
+      border-color: #6a5acd;
+    }
+    .stat-toggle-btn::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #a0a0c0;
+      transition: transform 0.25s, background 0.25s;
+    }
+    .stat-toggle-btn.active::after {
+      transform: translateX(18px);
+      background: #fff;
+    }
+    .stat-toggle-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #a0a0c0;
+      transition: color 0.25s;
+      user-select: none;
+    }
+    .stat-toggle-label.active-label { color: #d0c8f0; }
+    .stat-panel { position: relative; }
+    .stat-table { transition: opacity 0.3s ease; }
+    .stat-table.hidden { display: none; }
+    .stat-table.fading-out { opacity: 0; }
+    .stat-table.fading-in { opacity: 0; }
+    .rec-entry { margin-bottom: 16px; }
+    .rec-entry:last-child { margin-bottom: 0; }
+    .rec-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d0c8f0;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .rec-tag {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: rgba(106,90,205,0.2);
+      color: #a090d0;
+    }
+    .rec-tag.bis {
+      background: rgba(240,192,64,0.15);
+      color: #f0c040;
+    }
+    .rec-desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #9090b0;
+    }
+    .mainstat-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .mainstat-list li {
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px;
+      color: #a0a0c0;
+    }
+    .mainstat-list li:last-child { border-bottom: none; }
+    .mainstat-slot {
+      font-weight: 600;
+      color: #8888aa;
+    }
+    .mainstat-val {
+      color: #d0c8f0;
+      font-weight: 500;
+    }
+    .priority-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .priority-item:last-child { border-bottom: none; }
+    .priority-rank {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .priority-rank.rank-1 { background: rgba(240,192,64,0.2); color: #f0c040; }
+    .priority-rank.rank-2 { background: rgba(192,192,210,0.15); color: #c0c0d2; }
+    .priority-rank.rank-3 { background: rgba(180,130,80,0.15); color: #b4824f; }
+    .priority-rank.rank-4 { background: rgba(140,140,170,0.1); color: #8c8caa; }
+    .priority-info { flex: 1; }
+    .priority-type {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #7a6ae0;
+      margin-bottom: 2px;
+    }
+    .priority-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d0c8f0;
+    }
+    .priority-note {
+      font-size: 12px;
+      color: #8888aa;
+      margin-top: 2px;
+    }
+    .team-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .team-row:last-child { margin-bottom: 0; }
+    .team-block {
+      flex: 1;
+      min-width: 280px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .team-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8888aa;
+      margin-bottom: 12px;
+    }
+    .team-slots { display: flex; gap: 12px; }
+    .team-slot { flex: 1; text-align: center; }
+    .team-slot-icon {
+      width: 56px; height: 56px;
+      border-radius: 12px;
+      margin: 0 auto 6px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(255,255,255,0.08);
+      overflow: hidden;
+      background: #1a1d45;
+      position: relative;
+    }
+    .team-slot-icon img { width: 100%; height: 100%; object-fit: cover; }
+    .team-slot-icon img.alt-icon {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+    .team-slot-icon img.alt-icon:first-child {
+      animation: flashA 2s infinite;
+    }
+    .team-slot-icon img.alt-icon:nth-child(2) {
+      animation: flashB 2s infinite;
+    }
+    @keyframes flashA {
+      0%, 45%   { opacity: 1; }
+      50%, 95%  { opacity: 0; }
+      100%      { opacity: 1; }
+    }
+    @keyframes flashB {
+      0%, 45%   { opacity: 0; }
+      50%, 95%  { opacity: 1; }
+      100%      { opacity: 0; }
+    }
+    .team-slot-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: #d0c8f0;
+    }
+    .team-slot-role {
+      font-size: 10px;
+      color: #7a7ca0;
+      margin-top: 1px;
+    }
+    .team-note {
+      font-size: 12px;
+      color: #8888aa;
+      margin-top: 12px;
+      line-height: 1.5;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    .invest-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .invest-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .invest-card-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #8888aa;
+      margin-bottom: 8px;
+    }
+    .invest-card-value {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .invest-card-note {
+      font-size: 11px;
+      color: #7a7ca0;
+    }
+    .grade-s { color: #f0c040; }
+    .grade-a { color: #60d080; }
+    .grade-b { color: #60a0e0; }
+    .invest-summary {
+      padding: 16px;
+      background: rgba(106,90,205,0.06);
+      border: 1px solid rgba(106,90,205,0.12);
+      border-radius: 10px;
+    }
+    .invest-summary h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #c0b0f0;
+      margin-bottom: 8px;
+    }
+    .invest-summary p {
+      font-size: 13px;
+      line-height: 1.7;
+      color: #a0a0c0;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #2a2d5a; border-radius: 3px; }
+    @media (max-width: 1000px) {
+      .wiki-top { grid-template-columns: 1fr; }
+      .char-portrait { width: 220px; }
+      .wiki-sections { grid-template-columns: 1fr; }
+      .invest-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .main { padding: 16px; }
+      .char-portrait { width: 180px; }
+      .invest-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main">
+    <a href="https://akaerya.github.io/" class="back-btn">← Back to Characters</a>
+
+    <div class="wiki-top">
+      <div class="left-col">
+        <div class="char-portrait">
+          <img src="/images/character/anaxa.webp" alt="Anaxa">
+        </div>
+        <div class="info-box">
+          <div class="info-box-header">Character Info</div>
+          <div class="info-row">
+            <span class="info-label">Rarity</span>
+            <span class="info-value stars">★★★★★</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Path</span>
+            <span class="info-value">
+              <img src="/images/erudition.webp" alt="Erudition"> Erudition
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Element</span>
+            <span class="info-value">
+              <img src="/images/wind.webp" alt="Wind"> Wind
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Faction</span>
+            <span class="info-value">Chrysos Heirs</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">World</span>
+            <span class="info-value">Amphoreus</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-col">
+        <div class="char-name-block">
+          <h1>Anaxa</h1>
+          <div class="subtitle">"My name is Anaxagoras, one of the Seven Sages of the Grove of Epiphany, founder of the Nousporists. Now, don't make me repeat the following again. Rule number one: Do not call me Anaxa. Rule number two: Never interrupt me — silence is golden. Remember that."</div>
+        </div>
+        <div class="char-stars-lg">★★★★★</div>
+        <div class="description-box" style="margin-bottom: 16px;">
+          <h3>Character Summary</h3>
+          <p>Anaxa is a Skill-based DPS with an focus on weakness implants to enable the rest of his kit. After a certain number of weakness implants on an emey, he can trigger an additional Skill after attacking that enemy. His Ultimate also implants all weakness types to all enemies, which enables his kit faster. While he is listed as an Erudition character, his Skill is a bounce attack, which means that he excels more in single-target situations rather than high-target fights.</p>
+          <p>Anaxa can also function as a sub-DPS with The Herta, and Anaxa is Herta's best option at lower targets, but since Anaxa does not synergise too much with The Herta in the first place and that Herta is not that great into lower target fights, Anaxa might be better off as his standalone DPS for those fights instead.</p>
+        </div>
+        <div class="description-box">
+          <h3>Build Notes</h3>
+          <p>Recommended stats here are for a hypercarry Anaxa team and assumes ATK boots + Rutilant Arena + Genius 4pc. Aim for 100% CR if you are using Scholar 4pc.</p>
+          <p>CR/CD: If you are using Sunday, aim for 80% CR/130% CD instead. The lower CD requirement is because you need 5-6 SPD substats to get to 133.34+ SPD.</p>
+          <p>SPD: If you are using Cyrene/Cerydra, aim for 113.34+ SPD or base speed (99). 99 SPD is preferred if you are using DDD on Cerydra since you only need 1 DDD activation to get Anaxa to 2 actions in 150 AV. If you are using Cerydra/Sunday, aim for 113.34+ SPD, and with just Sunday, 133.34 SPD. For sub-DPS Anaxa, run SPD boots and get him to 143.9 SPD.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="wiki-sections">
+
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">✦</span> Recommended Stats (out of combat)
+        </div>
+        <div class="section-body">
+          <div class="stat-toggle-wrap">
+            <div class="stat-toggle-btn" id="statToggle" onclick="toggleStats()"></div>
+            <span class="stat-toggle-label active-label" id="statToggleLabel">E0S0</span>
+          </div>
+
+          <div class="stat-panel" id="statPanel">
+            <div class="stat-table" id="statsE0S0">
+              <div class="stat-section-label"><b>E0S0 (The Great Cosmic Enterprise)</b></div>
+              <ul class="trace-list">
+                <li><span>ATK</span> <span class="trace-val">2950+ (DMG) / 3400+ (ATK)</span></li>
+                <li><span>CRIT Rate</span> <span class="trace-val">95%+</span></li>
+                <li><span>CRIT DMG</span> <span class="trace-val">115%+</span></li>
+                <li><span>SPD</span> <span class="trace-val">99+ / 133.34+</span></li>
+              </ul>
+            </div>
+
+            <div class="stat-table hidden" id="statsE0S1">
+              <div class="stat-section-label"><b>5* E0S1 (Life Should Be Cast to Flames)</b></div>
+              <ul class="trace-list">
+                <li><span>ATK</span> <span class="trace-val">2950+ (DMG) / 3400+ (ATK)</span></li>
+                <li><span>CRIT Rate</span> <span class="trace-val">95%+</span></li>
+                <li><span>CRIT DMG</span> <span class="trace-val">115%+</span></li>
+                <li><span>SPD</span> <span class="trace-val">99+ / 133.34+</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="stat-section-label"><b>Mainstat Priority</b></div>
+          <ul class="mainstat-list" id="mainstatList">
+                <li><span class="mainstat-slot">Body:</span> <span class="mainstat-val">CR or CD</span></li>
+                <li><span class="mainstat-slot">Boots:</span> <span class="mainstat-val">ATK or SPD</span></li>
+                <li><span class="mainstat-slot">Sphere:</span> <span class="mainstat-val">ATK = DMG</span></li>
+                <li><span class="mainstat-slot">Rope:</span> <span class="mainstat-val">ATK</span></li>
+          </ul>
+          <div class="stat-section-label" style="margin-top:12px;"><b>Substat Priority</b></div>
+          <div class="rec-desc">SPD (until breakpoint) > CR > CD = ATK</div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">◈</span> Recommended Light Cones / Relic Sets
+        </div>
+        <div class="section-body">
+          <h4>Light Cones</h4>
+          <div class="rec-entry">
+            <div class="rec-name">Life Should Be Cast to Flames <span class="rec-tag bis">BiS</span></div>
+            <div class="rec-desc">His signature LC for both main DPS and sub-DPS Anaxa, and complements well with additional DEF shred sources such as Genius 4pc or Cerydra E1. Without Cyrene or Cerydra, this also facilitates easy 2-turn ult rotations for Anaxa.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Into the Unreachable Veil <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Herta's signature LC and a premium option for Anaxa; this LC provides CR (which Anaxa heavily lacks) and DMG to his primary sources of damage. The SP refund is useful for certain teams, but not a big priority for Cyrene/Cerydra teams. Compared to Anaxa's signature, this LC is of comparable performance without additional DEF shred sources, but Anaxa's LC is stronger with more DEF shred.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">The Great Cosmic Enterprise <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Best F2P option with a easily activatable secondary condition (for Anaxa) to get the full DMG boost.</div>
+          </div>
+
+          <h4 style="margin-top:20px;">Relic Sets</h4>
+          <div class="rec-entry">
+            <div class="rec-name">Genius of Brilliant Stars <span class="rec-tag bis">BiS</span></div>
+            <div class="rec-desc">General best set for Anaxa since he can implant Quantum weakness onto all enemies. The DEF shred provided from this set also synergises well with his general kit, signature LC and additional DEF shred sources like Cerydra E1.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Scholar Lost in Erudition <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Good and efficient set to farm. Performance is slightly worse than Genius (3% from Genius at E0S1 level), but it provides CR (which Anaxa notably lacks) and DMG to his primary sources of damage.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Pioneer Diver of Dead Waters <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Good set that Anaxa easily satisfies since he inflicts at least 3 debuffs in a fight. Comparable performance to Scholar.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">2pc Crit/2pc Crit <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">If you don't have any of the above 4pcs.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Eagle of Twilight Line <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Best for sub-DPS Anaxa (w/ SPD boots) and is a potential BiS if you are using Sunday + Cerydra assuming that you get consistent 2-turn ultimates on Anaxa (if Anaxa is on ATK boots).</div>
+          </div>
+
+          <h4 style="margin-top:20px;">Planar Ornaments</h4>
+          <div class="rec-entry">
+            <div class="rec-name">Rutilant Arena <span class="rec-tag bis">BiS</span></div>
+            <div class="rec-desc">Anaxa's unconditional BiS planar that provides CR and DMG for his primary source of damage (Skill).</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">The Wondrous BananAmusement Park <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Theoretically higher ceiling than Rutilant Arena due to better damage amplification but locks you to DHPT.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">⚙</span> Trace Priority
+        </div>
+        <div class="section-body">
+          <h4>Character Traces</h4>
+          <div class="priority-item">
+            <div class="priority-rank rank-1">1</div>
+            <div class="priority-info">
+              <div class="priority-type">Skill</div>
+              <div class="priority-name" data-trace-type="Skill">Fractal, Exiles Fallacy</div>
+              <div class="priority-note">Primary source of his damage. High priority.</div>
+            </div>
+          </div>
+          <div class="priority-item">
+            <div class="priority-rank rank-1">1</div>
+            <div class="priority-info">
+              <div class="priority-type">Talent</div>
+              <div class="priority-name" data-trace-type="Talent">Tetrad Wisdom Reigns Thrice</div>
+              <div class="priority-note">Amplifies his damage. High priority.</div>
+            </div>
+          </div>
+          <div class="priority-item">
+            <div class="priority-rank rank-3">3</div>
+            <div class="priority-info">
+              <div class="priority-type">Ultimate</div>
+              <div class="priority-name" data-trace-type="Ultimate">Sprouting Life Sculpts Earth</div>
+              <div class="priority-note">Secondary source of his damage. Medium to high priority.</div>
+            </div>
+          </div>
+          <div class="priority-item">
+            <div class="priority-rank rank-4">4</div>
+            <div class="priority-info">
+              <div class="priority-type">Basic ATK</div>
+              <div class="priority-name" data-trace-type="Basic ATK">Pain, Brews Truth</div>
+              <div class="priority-note">You should rarely be using this. Low priority.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="wiki-section-full">
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">👥</span> Team Suggestions
+        </div>
+        <div class="section-body">
+          <div class="team-row">
+            <div class="team-block">
+              <div class="team-label">Anaxa Hypercarry (Cyrene)</div>
+              <div class="team-slots">
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Anaxa_Icon.webp" alt="Anaxa"></div>
+                  <div class="team-slot-name">Anaxa</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Cyrene_Icon.webp" alt="Cyrene"></div>
+                  <div class="team-slot-name">Cyrene</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Cerydra_Icon.webp" alt="Cerydra"></div>
+                  <div class="team-slot-name">Cerydra</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon">
+                    <img class="alt-icon" src="/images/small/Character_DHPT_Icon.webp" alt="DHPT">
+                    <img class="alt-icon" src="/images/small/Character_RMC_Icon.webp" alt="RMC">
+                  </div>
+                  <div class="team-slot-name">DHPT/RMC</div>
+                  <div class="team-slot-role">Flex</div>
+                </div>
+              </div>
+              <div class="team-note">Anaxa's current best team, and, with RMC instead of DHPT, his most comfortable sustainless option. Cyrene allows Anaxa to take immediate action with more bounces per Skill, and Cerydra's Coup de Main/double skill copies the enhanced Skill as well, which greatly maximises damage output, and given that Cyrene's advance is on command, you can deal damage more efficiently or in a more compressed period (like when an enemy is in a temporary vulnerable state). In this setup, Anaxa uses ATK boots while Cerydra wears DDD to get him to 2 natural turns in 150AV. Alternatively, you can forgo DDD and give Anaxa 113.34+ SPD out of combat, but that requires tighter relic investment. Both Cyrene and Cerydra are essential to the team.</div>
+            </div>
+            <div class="team-block">
+              <div class="team-label">Anaxa Hypercarry (Sunday/-1 SPD)</div>
+              <div class="team-slots">
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Anaxa_Icon.webp" alt="Anaxa"></div>
+                  <div class="team-slot-name">Anaxa</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Sunday_Icon.webp" alt="Sunday"></div>
+                  <div class="team-slot-name">Sunday</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Cerydra_Icon.webp" alt="Cerydra"></div>
+                  <div class="team-slot-name">Cerydra</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_DHPT_Icon.webp" alt="DHPT"></div>
+                  <div class="team-slot-name">DHPT</div>
+                  <div class="team-slot-role">Sustain</div>
+                </div>
+              </div>
+              <div class="team-note">Anaxa's former best team with lower stat requirements but a considerably lower damage ceiling due to Cyrene's buffs and synergy with Cerydra. Anaxa should be 113.34+ SPD out of combat (since Cerydra gains 20 SPD) while Sunday should be 133.34+ SPD and slower than Anaxa. Cerydra can be replaced with Tribbie or Robin, while Sunday can be replaced with Bronya E2. This team also greatly benefits from Sunday's S1 and Cerydra's S1, since SP consumption is a notable concern with this team for optimal performance.</div>
+            </div>
+          </div>
+          <div class="team-row">
+            <div class="team-block">
+              <div class="team-label">Sub-DPS Anaxa (Therta Hypercarry)</div>
+              <div class="team-slots">
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_The_Herta_Icon.webp" alt="The Herta"></div>
+                  <div class="team-slot-name">The Herta</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Anaxa_Icon.webp" alt="Anaxa"></div>
+                  <div class="team-slot-name">Anaxa</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Tribbie_Icon.webp" alt="Tribbie"></div>
+                  <div class="team-slot-name">Tribbie</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_DHPT_Icon.webp" alt="DHPT"></div>
+                  <div class="team-slot-name">DHPT</div>
+                  <div class="team-slot-role">Sustain</div>
+                </div>
+              </div>
+              <div class="team-note">The Herta's best team in lower target fights due to Anaxa's personal damage, but The Herta is better suited for higher target fights, which makes Anaxa hypercarry a better team for those scenarios instead. Regardless, Anaxa can be used in Pure Fiction though as a weaker Erudition support compared to Jade or 4* Herta. Anaxa should be on Eagle + SPD boots with this setup.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="wiki-section-full">
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">📊</span> Vertical Investment Analysis
+        </div>
+        <div class="section-body">
+          <div class="invest-grid">
+            <div class="invest-card">
+              <div class="invest-card-label">Sig LC (S1)</div>
+              <div class="invest-card-value grade-b">★★</div>
+              <div class="invest-card-note">About a 13% damage improvement with QoL, but it can be higher with more DEF shred sources.</div>
+            </div>
+            <div class="invest-card">
+              <div class="invest-card-label">Teammates</div>
+              <div class="invest-card-value grade-a">★★★</div>
+              <div class="invest-card-note">Cerydra E1 is an 18% damage improvement that improves with more DEF shred, Cyrene S1 is a 20% improvement. Cyrene E2 is a very notable improvement if minmaxed, but requires steep eidolon investment overall.</div>
+            </div>
+            <div class="invest-card">
+              <div class="invest-card-label">E1</div>
+              <div class="invest-card-value grade-b">★★</div>
+              <div class="invest-card-note">A 10% damage increase but can be higher with more DEF shred sources.</div>
+            </div>
+            <div class="invest-card">
+              <div class="invest-card-label">E2</div>
+              <div class="invest-card-value grade-a">★★★</div>
+              <div class="invest-card-note">A 20% damage increase minimum and removes the ramp-up time needed to use double skills with Anaxa.</div>
+            </div>
+          </div>
+
+          <div class="invest-summary">
+            <h4>Investment Recommendation</h4>
+            <p>Not counting E2s, Anaxa S1 = Cerydra E1 = DHPT E1 = Cyrene S1. For light spenders to dolphins, Cyrene E2 provides the best upgrade for value (up to 60%+ in damage output), while the others provide 18-20% damage improvements each.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let showingE0S1 = false;
+    function toggleStats() {
+      const toggle = document.getElementById('statToggle');
+      const label = document.getElementById('statToggleLabel');
+      const current = showingE0S1 ? document.getElementById('statsE0S1') : document.getElementById('statsE0S0');
+      const next = showingE0S1 ? document.getElementById('statsE0S0') : document.getElementById('statsE0S1');
+      showingE0S1 = !showingE0S1;
+      toggle.classList.toggle('active', showingE0S1);
+      label.textContent = showingE0S1 ? '5* E0S1 / 4* E6S5' : 'E0S0';
+      current.classList.add('fading-out');
+      setTimeout(() => {
+        current.classList.add('hidden');
+        current.classList.remove('fading-out');
+        next.classList.remove('hidden');
+        next.classList.add('fading-in');
+        void next.offsetWidth;
+        next.classList.remove('fading-in');
+      }, 300);
+    }
+  </script>
+</body>
+</html>

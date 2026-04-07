@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ashveil - Character Details</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0b0d1a;
+      color: #e0e0f0;
+      display: flex;
+      min-height: 100vh;
+    }
+    .main {
+      margin-left: 0px;
+      flex: 1;
+      padding: 32px 36px;
+      max-width: 1400px;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: #14163a;
+      color: #a0a0c0;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 28px;
+      text-decoration: none;
+    }
+    .back-btn:hover { border-color: #6a5acd; color: #e0e0f0; }
+    .wiki-top {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+    .left-col { display: flex; flex-direction: column; gap: 20px; }
+    .char-portrait {
+      width: 280px;
+      aspect-ratio: 1 / 1.15;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(160deg, #2a1a4a 0%, #1a1040 50%, #301a50 100%);
+    }
+    .char-portrait img { width: 100%; height: 100%; object-fit: cover; }
+    .info-box {
+      background: #12142e;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .info-box-header {
+      background: linear-gradient(135deg, #1e1a45, #2a2060);
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #c0c0f0;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-label { color: #8888aa; font-weight: 500; }
+    .info-value {
+      color: #d0d0f0;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .info-value img { width: 20px; height: 20px; border-radius: 4px; }
+    .stars { color: #f0c040; letter-spacing: 1px; }
+    .right-col { display: flex; flex-direction: column; }
+    .char-name-block { margin-bottom: 8px; }
+    .char-name-block h1 {
+      font-size: 36px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .char-name-block .subtitle {
+      font-size: 14px;
+      color: #8888aa;
+      font-style: italic;
+    }
+    .char-stars-lg {
+      font-size: 20px;
+      color: #f0c040;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+    .description-box {
+      background: #12142e;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 24px;
+      flex: 1;
+    }
+    .description-box h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #c0b0f0;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .description-box p {
+      font-size: 14px;
+      line-height: 1.75;
+      color: #b0b0d0;
+    }
+    .description-box p + p { margin-top: 12px; }
+    .wiki-sections {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .wiki-section-full { margin-bottom: 20px; }
+    .section-card {
+      background: #12142e;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .section-card:hover { border-color: rgba(106,90,205,0.3); }
+    .section-header {
+      background: linear-gradient(135deg, #1e1a45, #2a2060);
+      padding: 14px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #c0c0f0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-header .icon {
+      width: 20px; height: 20px;
+      border-radius: 6px;
+      background: rgba(106,90,205,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+    }
+    .section-body { padding: 20px; }
+    .section-body p {
+      font-size: 13px;
+      line-height: 1.7;
+      color: #a0a0c0;
+    }
+    .section-body h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d0c8f0;
+      margin-bottom: 8px;
+    }
+    .trace-list { list-style: none; }
+    .trace-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px;
+      color: #a0a0c0;
+      display: flex;
+      justify-content: space-between;
+    }
+    .trace-list li:last-child { border-bottom: none; }
+    .trace-val { color: #d0c8f0; font-weight: 500; }
+    .stat-section-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8888aa;
+      margin-bottom: 8px;
+      margin-top: 16px;
+    }
+    .stat-section-label:first-child { margin-top: 0; }
+    .stat-toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .stat-toggle-btn {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      border-radius: 11px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: #1a1d45;
+      cursor: pointer;
+      transition: background 0.25s, border-color 0.25s;
+      flex-shrink: 0;
+    }
+    .stat-toggle-btn.active {
+      background: linear-gradient(135deg, #3b2f7a, #5a3fa0);
+      border-color: #6a5acd;
+    }
+    .stat-toggle-btn::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #a0a0c0;
+      transition: transform 0.25s, background 0.25s;
+    }
+    .stat-toggle-btn.active::after {
+      transform: translateX(18px);
+      background: #fff;
+    }
+    .stat-toggle-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #a0a0c0;
+      transition: color 0.25s;
+      user-select: none;
+    }
+    .stat-toggle-label.active-label { color: #d0c8f0; }
+    .stat-panel { position: relative; }
+    .stat-table { transition: opacity 0.3s ease; }
+    .stat-table.hidden { display: none; }
+    .stat-table.fading-out { opacity: 0; }
+    .stat-table.fading-in { opacity: 0; }
+    .rec-entry { margin-bottom: 16px; }
+    .rec-entry:last-child { margin-bottom: 0; }
+    .rec-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d0c8f0;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .rec-tag {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: rgba(106,90,205,0.2);
+      color: #a090d0;
+    }
+    .rec-tag.bis {
+      background: rgba(240,192,64,0.15);
+      color: #f0c040;
+    }
+    .rec-desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #9090b0;
+    }
+    .mainstat-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .mainstat-list li {
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px;
+      color: #a0a0c0;
+    }
+    .mainstat-list li:last-child { border-bottom: none; }
+    .mainstat-slot {
+      font-weight: 600;
+      color: #8888aa;
+    }
+    .mainstat-val {
+      color: #d0c8f0;
+      font-weight: 500;
+    }
+    .priority-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .priority-item:last-child { border-bottom: none; }
+    .priority-rank {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .priority-rank.rank-1 { background: rgba(240,192,64,0.2); color: #f0c040; }
+    .priority-rank.rank-2 { background: rgba(192,192,210,0.15); color: #c0c0d2; }
+    .priority-rank.rank-3 { background: rgba(180,130,80,0.15); color: #b4824f; }
+    .priority-rank.rank-4 { background: rgba(140,140,170,0.1); color: #8c8caa; }
+    .priority-info { flex: 1; }
+    .priority-type {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #7a6ae0;
+      margin-bottom: 2px;
+    }
+    .priority-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d0c8f0;
+    }
+    .priority-note {
+      font-size: 12px;
+      color: #8888aa;
+      margin-top: 2px;
+    }
+    .team-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .team-row:last-child { margin-bottom: 0; }
+    .team-block {
+      flex: 1;
+      min-width: 280px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .team-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8888aa;
+      margin-bottom: 12px;
+    }
+    .team-slots { display: flex; gap: 12px; }
+    .team-slot { flex: 1; text-align: center; }
+    .team-slot-icon {
+      width: 56px; height: 56px;
+      border-radius: 12px;
+      margin: 0 auto 6px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(255,255,255,0.08);
+      overflow: hidden;
+      background: #1a1d45;
+      position: relative;
+    }
+    .team-slot-icon img { width: 100%; height: 100%; object-fit: cover; }
+    .team-slot-icon img.alt-icon {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+    .team-slot-icon img.alt-icon:first-child {
+      animation: flashA 2s infinite;
+    }
+    .team-slot-icon img.alt-icon:nth-child(2) {
+      animation: flashB 2s infinite;
+    }
+    @keyframes flashA {
+      0%, 45%   { opacity: 1; }
+      50%, 95%  { opacity: 0; }
+      100%      { opacity: 1; }
+    }
+    @keyframes flashB {
+      0%, 45%   { opacity: 0; }
+      50%, 95%  { opacity: 1; }
+      100%      { opacity: 0; }
+    }
+    .team-slot-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: #d0c8f0;
+    }
+    .team-slot-role {
+      font-size: 10px;
+      color: #7a7ca0;
+      margin-top: 1px;
+    }
+    .team-note {
+      font-size: 12px;
+      color: #8888aa;
+      margin-top: 12px;
+      line-height: 1.5;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    .invest-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .invest-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .invest-card-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #8888aa;
+      margin-bottom: 8px;
+    }
+    .invest-card-value {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .invest-card-note {
+      font-size: 11px;
+      color: #7a7ca0;
+    }
+    .grade-s { color: #f0c040; }
+    .grade-a { color: #60d080; }
+    .grade-b { color: #60a0e0; }
+    .invest-summary {
+      padding: 16px;
+      background: rgba(106,90,205,0.06);
+      border: 1px solid rgba(106,90,205,0.12);
+      border-radius: 10px;
+    }
+    .invest-summary h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #c0b0f0;
+      margin-bottom: 8px;
+    }
+    .invest-summary p {
+      font-size: 13px;
+      line-height: 1.7;
+      color: #a0a0c0;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #2a2d5a; border-radius: 3px; }
+    @media (max-width: 1000px) {
+      .wiki-top { grid-template-columns: 1fr; }
+      .char-portrait { width: 220px; }
+      .wiki-sections { grid-template-columns: 1fr; }
+      .invest-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .main { padding: 16px; }
+      .char-portrait { width: 180px; }
+      .invest-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main">
+    <a href="https://akaerya.github.io/" class="back-btn">← Back to Characters</a>
+
+    <div class="wiki-top">
+      <div class="left-col">
+        <div class="char-portrait">
+          <img src="/images/character/ashveil.webp" alt="Ashveil">
+        </div>
+        <div class="info-box">
+          <div class="info-box-header">Character Info</div>
+          <div class="info-row">
+            <span class="info-label">Rarity</span>
+            <span class="info-value stars">★★★★★</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Path</span>
+            <span class="info-value">
+              <img src="/images/hunt.webp" alt="Hunt"> Hunt
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Element</span>
+            <span class="info-value">
+              <img src="/images/lightning.webp" alt="Lightning"> Lightning
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Faction</span>
+            <span class="info-value">Galaxy Rangers</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">World</span>
+            <span class="info-value">Planarcadia</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-col">
+        <div class="char-name-block">
+          <h1>Ashveil</h1>
+          <div class="subtitle">"I am Detective Ashveil of the Ashen Detective Agency. This is my business card. I take all sorts of assignments such as looking for lost pets, pretending to be a parent in parent-teacher nights, capturing interstellar wanted criminals, or tracing the whereabouts of an Aeon... So, what can I do for you?"</div>
+        </div>
+        <div class="char-stars-lg">★★★★★</div>
+        <div class="description-box" style="margin-bottom: 16px;">
+          <h3>Character Summary</h3>
+          <p>Ashveil is an SP-neutral unit that provides damage amplification (Crit DMG and DEF shred) while dealing decent damage on his own. While his kit is geared towards being a supportive or sub-DPS unit, he is currently best played as a main DPS unit as there are no strong DPSes that complement his overall playstyle.</p>
+          <p>Most of his damage is gated through his Ultimate, which gives him 3 strong FUAs and an enhanced FUA. However, he gains energy through allies (including himself) attacking an enemy that he marks with Bait (through his Talent or his Skill), which means that he is best complemented with frequent attackers or units that provide energy for him.</p>
+        </div>
+        <div class="description-box">
+          <h3>Build Notes</h3>
+          <p>Recommended stats are out of combat, but if you use advancers that increase CR such as Sunday or RMC, reduce the CR recommendation accordingly (-10% for RMC, -20% for Sunday). Ashveil gains up to 120% CD in combat, so focus more on CR over CD. He needs 16 CR substats and a CR body with Cruising S5 to hit 100% CR without further CR sources. The ATK recommendation is for 1 ATK main stat and 2 ATK main stats respectively.</p>
+          <p>Boots: Use ATK boots if you are using Sparkle or RMC with Ashveil. SPD boots is only recommended with a -1 SPD setup. For a sub-DPS Ashveil team, Ashveil prefers SPD boots.</p>
+          <p>Orb: DMG orb is best with Sparkle or RMC as your sole advancer, but ATK is marginally better with Sunday/DHPT.</p>
+          <p>Rope: ATK rope is best, but ERR rope can be preferred if you are able to get one extra ultimate through an ERR rope within a certain timeframe. However, the utility of an ERR rope is diminished since his energy gain from ally attacks is not affected by ERR.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="wiki-sections">
+
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">✦</span> Recommended Stats (out of combat)
+        </div>
+        <div class="section-body">
+          <div class="stat-toggle-wrap">
+            <div class="stat-toggle-btn" id="statToggle" onclick="toggleStats()"></div>
+            <span class="stat-toggle-label active-label" id="statToggleLabel">E0S0</span>
+          </div>
+
+          <div class="stat-panel" id="statPanel">
+            <div class="stat-table" id="statsE0S0">
+              <div class="stat-section-label"><b>E0S0 (Cruising in the Stellar Sea)</b></div>
+              <ul class="trace-list">
+                <li><span>ATK</span> <span class="trace-val">2300+ / 2800+</span></li>
+                <li><span>CRIT Rate</span> <span class="trace-val">95% - 100%</span></li>
+                <li><span>CRIT DMG</span> <span class="trace-val">110%</span></li>
+                <li><span>SPD</span> <span class="trace-val">105 / 133.34+</span></li>
+              </ul>
+            </div>
+
+            <div class="stat-table hidden" id="statsE0S1">
+              <div class="stat-section-label"><b>5* E0S1 (The Finale of a Lie)</b></div>
+              <ul class="trace-list">
+                <li><span>ATK</span> <span class="trace-val">2450+ / 3050+</span></li>
+                <li><span>CRIT Rate</span> <span class="trace-val">95% - 100%</span></li>
+                <li><span>CRIT DMG</span> <span class="trace-val">120%+</span></li>
+                <li><span>SPD</span> <span class="trace-val">105 / 133.34+</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="stat-section-label"><b>Mainstat Priority</b></div>
+          <ul class="mainstat-list" id="mainstatList">
+                <li><span class="mainstat-slot">Body:</span> <span class="mainstat-val">CR</span></li>
+                <li><span class="mainstat-slot">Boots:</span> <span class="mainstat-val">ATK or SPD</span></li>
+                <li><span class="mainstat-slot">Sphere:</span> <span class="mainstat-val">DMG >= ATK</span></li>
+                <li><span class="mainstat-slot">Rope:</span> <span class="mainstat-val">ATK > ERR</span></li>
+          </ul>
+          <div class="stat-section-label" style="margin-top:12px;"><b>Substat Priority</b></div>
+          <div class="rec-desc">SPD (until threshold) > CR > CD > ATK</div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">◈</span> Recommended Light Cones / Relic Sets
+        </div>
+        <div class="section-body">
+          <h4>Light Cones</h4>
+          <div class="rec-entry">
+            <div class="rec-name">The Finale of a Lie S1 <span class="rec-tag bis">BiS</span></div>
+            <div class="rec-desc">Best generalist LC (25% improvement over Cruising with no secondary buffs) for both main DPS and sub-DPS Ashveil, providing most of the stats that Ashveil wants (ATK and CR) while having good supportive damage amplification.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Baptism of Pure Thought S1 <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Theoretical best BiS LC for main DPS Ashveil due to its overall damage amp (DEF shred and good DMG%), but Ashveil requires 22 CR substats to reach 100% CR with this LC without Sunday or RMC. If you are lacking CR, you are better off using a different cone.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Worrisome, Blissful S1 <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">10% improvement from Cruising with no secondary effects, but performance can be slightly lower if you're fighting multiple targets since the debuff from this LC is single target and requires ramp-up time.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Cruising in the Stellar Sea S5 <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Best F2P option. You can build around the secondary 16% CR buff of this LC, but it makes runs much less consistent and is not recommended.</div>
+          </div>
+
+          <h4 style="margin-top:20px;">Relic Sets</h4>
+          <div class="rec-entry">
+            <div class="rec-name">The Ashblazing Grand Duke <span class="rec-tag bis">BiS</span></div>
+            <div class="rec-desc">Unconditional best set for him which provides him with a notable ATK boost (which Ashveil wants) and some DMG%.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Pioneer Diver of Dead Waters <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Second best unconditional option for him (4-5% damage loss from Duke) as he inflicts 3 debuffs in total.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Crit 2pc / Crit 2pc <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">For if you don't have any of the above 4pcs.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Genius of Brilliant Stars <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Under best conditions (with additional DEF shred sources like Ratio's LC, Cipher E0S1 or Sparkle E2 and Quantum-weak enemies), this can be on par with Duke 4pc, but under poor conditions, this set performs worse than Pioneer.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Eagle of Twilight Line <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Strictly for sub-DPS Ashveil (when paired with Feixiao), and even then, it might not always be the best option if you don't hit any notable SPD breakpoints with this set.</div>
+          </div>
+
+          <h4 style="margin-top:20px;">Planar Ornaments</h4>
+          <div class="rec-entry">
+            <div class="rec-name">Duran, Dynasty of Running Wolves <span class="rec-tag bis">BiS</span></div>
+            <div class="rec-desc">BiS planar for main DPS Ashveil with very fast ramp-up time.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">City of Converging Stars <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">BiS planar for sub-DPS Ashveil. For main DPS Ashveil, this performs comparably to Duran but only if you kill an enemy within 75-100 AV.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">The Wondrous BananAmusement Park <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Comparable performance to Duran but locks you to DHPT.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Inert Salsotto <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">2% worse than Duran, but a decent option due to its CR and DMG boost to most of Ashveil's damage if you don't have any alternative planars to use.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">⚙</span> Trace Priority
+        </div>
+        <div class="section-body">
+          <h4>Character Traces</h4>
+          <div class="priority-item">
+            <div class="priority-rank rank-1">1</div>
+            <div class="priority-info">
+              <div class="priority-type">Skill</div>
+              <div class="priority-name" data-trace-type="Skill">Flog: Smite Evil</div>
+              <div class="priority-note">His DEF shred scales off his skill, which is a big source of damage amp. High priority.</div>
+            </div>
+          </div>
+          <div class="priority-item">
+            <div class="priority-rank rank-1">1</div>
+            <div class="priority-info">
+              <div class="priority-type">Ultimate</div>
+              <div class="priority-name" data-trace-type="Ultimate">Banquet: Insatiable Appetite</div>
+              <div class="priority-note">Primary source of damage. High priority.</div>
+            </div>
+          </div>
+          <div class="priority-item">
+            <div class="priority-rank rank-1">1</div>
+            <div class="priority-info">
+              <div class="priority-type">Talent</div>
+              <div class="priority-name" data-trace-type="Talent">Rancor: Enmity Reprisal</div>
+              <div class="priority-note">Primary source of damage. High priority.</div>
+            </div>
+          </div>
+          <div class="priority-item">
+            <div class="priority-rank rank-4">4</div>
+            <div class="priority-info">
+              <div class="priority-type">Basic ATK</div>
+              <div class="priority-name" data-trace-type="Basic ATK">Talons: Inculcate Decorum</div>
+              <div class="priority-note">You should never be using this. Low priority.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="wiki-section-full">
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">👥</span> Team Suggestions
+        </div>
+        <div class="section-body">
+          <div class="team-row">
+            <div class="team-block">
+              <div class="team-label">Hypercarry Ashveil (-1 SPD)</div>
+              <div class="team-slots">
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Ashveil_Icon.webp" alt="Ashveil"></div>
+                  <div class="team-slot-name">Ashveil</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Sunday_Icon.webp" alt="Sunday"></div>
+                  <div class="team-slot-name">Sunday</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Cipher_Icon.webp" alt="Cipher"></div>
+                  <div class="team-slot-name">Cipher</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_DHPT_Icon.webp" alt="DHPT"></div>
+                  <div class="team-slot-name">DHPT</div>
+                  <div class="team-slot-role">Sustain</div>
+                </div>
+              </div>
+              <div class="team-note">Lowest relic investment required for an Ashveil DPS team with a decent floor due to Sunday's CR buffs, but it requires Ashveil and Sunday to be above 133.34+ SPD and Ashveil faster than Sunday.
+
+Cipher is his general best non-advancer support for lower target fights, but she can be replaced with Tribbie, Tingyun, RMC or a high speed Silver Wolf for different utility. 
+
+For sustains, DHPT is his best sustain by far by providing everything that Ashveil wants (ATK and attack frequency). For alternatives (albeit worse choices), you can use Hyacine, Aventurine or a high speed Gallagher.
+
+In this setup, ATK orb is better than DMG orb since Sunday provides a total of 80% DMG for Ashveil.</div>
+            </div>
+            <div class="team-block">
+              <div class="team-label">Hypercarry Ashveil (Slow/Base Speed)</div>
+              <div class="team-slots">
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Ashveil_Icon.webp" alt="Ashveil"></div>
+                  <div class="team-slot-name">Ashveil</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon">
+                    <img class="alt-icon" src="/images/small/Character_Sparkle_Icon.webp" alt="Sparkle">
+                    <img class="alt-icon" src="/images/small/Character_RMC_Icon.webp" alt="RMC">
+                  </div>
+                  <div class="team-slot-name">Sparkle/RMC</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Cipher_Icon.webp" alt="Cipher"></div>
+                  <div class="team-slot-name">Cipher</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_DHPT_Icon.webp" alt="DHPT"></div>
+                  <div class="team-slot-name">DHPT</div>
+                  <div class="team-slot-role">Sustain</div>
+                </div>
+              </div>
+              <div class="team-note">Higher relic investment required due to requiring more crit substats on Ashveil and SPD substats on Sparkle/RMC, but it has a higher damage ceiling overall for low-cycle runs. Substitutes for non-advancer supports are the same as the -1 SPD Ashveil team.
+
+DMG orb is better than ATK orb in this setup.</div>
+            </div>
+          </div>
+          <div class="team-row">
+            <div class="team-block">
+              <div class="team-label">Dual Carry Ashveil</div>
+              <div class="team-slots">
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Feixiao_Icon.webp" alt="Feixiao"></div>
+                  <div class="team-slot-name">Feixiao</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Ashveil_Icon.webp" alt="Ashveil"></div>
+                  <div class="team-slot-name">Ashveil</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon">
+                    <img class="alt-icon" src="/images/small/Character_Tribbie_Icon.webp" alt="Tribbie">
+                    <img class="alt-icon" src="/images/small/Character_Robin_Icon.webp" alt="Robin">
+                  </div>
+                  <div class="team-slot-name">Tribbie/Robin</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_DHPT_Icon.webp" alt="DHPT"></div>
+                  <div class="team-slot-name">DHPT</div>
+                  <div class="team-slot-role">Sustain</div>
+                </div>
+              </div>
+              <div class="team-note">At the moment, Feixiao is his best DPS partner due to her high attack frequency, but the damage distribution between Feixiao and Ashveil are about even at E0S1 level even with Bondmate on Feixiao. Ashveil is still Feixiao's strongest FuA partner, but at the moment he functions better as a main DPS than a sub-DPS. Tribbie and Robin are both good supports as it amps both DPSes' damage and can provide additional action advance.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="wiki-section-full">
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">📊</span> Vertical Investment Analysis
+        </div>
+        <div class="section-body">
+          <div class="invest-grid">
+            <div class="invest-card">
+              <div class="invest-card-label">Sig LC (S1)</div>
+              <div class="invest-card-value grade-s">★★★★</div>
+              <div class="invest-card-note">25% improvement over Cruising in a main DPS team, performance is lower with more vulnerability sources.</div>
+            </div>
+            <div class="invest-card">
+              <div class="invest-card-label">Teammates</div>
+              <div class="invest-card-value grade-a">★★★</div>
+              <div class="invest-card-note">Vertical investment for his teammates (Cipher S1, Tribbie E1, DHPT E1) range from 16-24% per premium pull, about 20% on average per good eidolon/signature LC.</div>
+            </div>
+            <div class="invest-card">
+              <div class="invest-card-label">E1</div>
+              <div class="invest-card-value grade-b">★★</div>
+              <div class="invest-card-note">15-18% improvement over E0 in his usual main DPS team (assumes Cipher or Tribbie), but performance is lower with more vuln sources and better with fewer vuln sources.</div>
+            </div>
+            <div class="invest-card">
+              <div class="invest-card-label">E2</div>
+              <div class="invest-card-value grade-a">★★★</div>
+              <div class="invest-card-note">20% improvement over E1 in simulations, but performance is often a bit higher in practice.</div>
+            </div>
+          </div>
+
+          <div class="invest-summary">
+            <h4>Investment Recommendation</h4>
+            <p>Ashveil S1 > DHPT E1 = Support E0S1/E1S0 > Ashveil E1 > Sparkle E1/S1. Ashveil E0S1 + one premium pull on support is good enough for most endgame content.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let showingE0S1 = false;
+    function toggleStats() {
+      const toggle = document.getElementById('statToggle');
+      const label = document.getElementById('statToggleLabel');
+      const current = showingE0S1 ? document.getElementById('statsE0S1') : document.getElementById('statsE0S0');
+      const next = showingE0S1 ? document.getElementById('statsE0S0') : document.getElementById('statsE0S1');
+      showingE0S1 = !showingE0S1;
+      toggle.classList.toggle('active', showingE0S1);
+      label.textContent = showingE0S1 ? '5* E0S1 / 4* E6S5' : 'E0S0';
+      current.classList.add('fading-out');
+      setTimeout(() => {
+        current.classList.add('hidden');
+        current.classList.remove('fading-out');
+        next.classList.remove('hidden');
+        next.classList.add('fading-in');
+        void next.offsetWidth;
+        next.classList.remove('fading-in');
+      }, 300);
+    }
+  </script>
+</body>
+</html>
