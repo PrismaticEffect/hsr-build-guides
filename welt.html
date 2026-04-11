@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welt - Character Details</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0b0d1a;
+      color: #e0e0f0;
+      display: flex;
+      min-height: 100vh;
+    }
+    .main {
+      margin-left: 0px;
+      flex: 1;
+      padding: 32px 36px;
+      max-width: 1400px;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: #14163a;
+      color: #a0a0c0;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 28px;
+      text-decoration: none;
+    }
+    .back-btn:hover { border-color: #6a5acd; color: #e0e0f0; }
+    .wiki-top {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+    .left-col { display: flex; flex-direction: column; gap: 20px; }
+    .char-portrait {
+      width: 280px;
+      aspect-ratio: 1 / 1.15;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(160deg, #2a1a4a 0%, #1a1040 50%, #301a50 100%);
+    }
+    .char-portrait img { width: 100%; height: 100%; object-fit: cover; }
+    .info-box {
+      background: #12142e;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .info-box-header {
+      background: linear-gradient(135deg, #1e1a45, #2a2060);
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #c0c0f0;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-label { color: #8888aa; font-weight: 500; }
+    .info-value {
+      color: #d0d0f0;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .info-value img { width: 20px; height: 20px; border-radius: 4px; }
+    .stars { color: #f0c040; letter-spacing: 1px; }
+    .right-col { display: flex; flex-direction: column; }
+    .char-name-block { margin-bottom: 8px; }
+    .char-name-block h1 {
+      font-size: 36px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .char-name-block .subtitle {
+      font-size: 14px;
+      color: #8888aa;
+      font-style: italic;
+    }
+    .char-stars-lg {
+      font-size: 20px;
+      color: #f0c040;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+    .description-box {
+      background: #12142e;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 24px;
+      flex: 1;
+    }
+    .description-box h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #c0b0f0;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .description-box p {
+      font-size: 14px;
+      line-height: 1.75;
+      color: #b0b0d0;
+    }
+    .description-box p + p { margin-top: 12px; }
+    .wiki-sections {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .wiki-section-full { margin-bottom: 20px; }
+    .section-card {
+      background: #12142e;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .section-card:hover { border-color: rgba(106,90,205,0.3); }
+    .section-header {
+      background: linear-gradient(135deg, #1e1a45, #2a2060);
+      padding: 14px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #c0c0f0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-header .icon {
+      width: 20px; height: 20px;
+      border-radius: 6px;
+      background: rgba(106,90,205,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+    }
+    .section-body { padding: 20px; }
+    .section-body p {
+      font-size: 13px;
+      line-height: 1.7;
+      color: #a0a0c0;
+    }
+    .section-body h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d0c8f0;
+      margin-bottom: 8px;
+    }
+    .trace-list { list-style: none; }
+    .trace-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px;
+      color: #a0a0c0;
+      display: flex;
+      justify-content: space-between;
+    }
+    .trace-list li:last-child { border-bottom: none; }
+    .trace-val { color: #d0c8f0; font-weight: 500; }
+    .stat-section-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8888aa;
+      margin-bottom: 8px;
+      margin-top: 16px;
+    }
+    .stat-section-label:first-child { margin-top: 0; }
+    .stat-toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .stat-toggle-btn {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      border-radius: 11px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: #1a1d45;
+      cursor: pointer;
+      transition: background 0.25s, border-color 0.25s;
+      flex-shrink: 0;
+    }
+    .stat-toggle-btn.active {
+      background: linear-gradient(135deg, #3b2f7a, #5a3fa0);
+      border-color: #6a5acd;
+    }
+    .stat-toggle-btn::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #a0a0c0;
+      transition: transform 0.25s, background 0.25s;
+    }
+    .stat-toggle-btn.active::after {
+      transform: translateX(18px);
+      background: #fff;
+    }
+    .stat-toggle-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #a0a0c0;
+      transition: color 0.25s;
+      user-select: none;
+    }
+    .stat-toggle-label.active-label { color: #d0c8f0; }
+    .stat-panel { position: relative; }
+    .stat-table { transition: opacity 0.3s ease; }
+    .stat-table.hidden { display: none; }
+    .stat-table.fading-out { opacity: 0; }
+    .stat-table.fading-in { opacity: 0; }
+    .rec-entry { margin-bottom: 16px; }
+    .rec-entry:last-child { margin-bottom: 0; }
+    .rec-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d0c8f0;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .rec-tag {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: rgba(106,90,205,0.2);
+      color: #a090d0;
+    }
+    .rec-tag.bis {
+      background: rgba(240,192,64,0.15);
+      color: #f0c040;
+    }
+    .rec-desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #9090b0;
+    }
+    .mainstat-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .mainstat-list li {
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px;
+      color: #a0a0c0;
+    }
+    .mainstat-list li:last-child { border-bottom: none; }
+    .mainstat-slot {
+      font-weight: 600;
+      color: #8888aa;
+    }
+    .mainstat-val {
+      color: #d0c8f0;
+      font-weight: 500;
+    }
+    .priority-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .priority-item:last-child { border-bottom: none; }
+    .priority-rank {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .priority-rank.rank-1 { background: rgba(240,192,64,0.2); color: #f0c040; }
+    .priority-rank.rank-2 { background: rgba(192,192,210,0.15); color: #c0c0d2; }
+    .priority-rank.rank-3 { background: rgba(180,130,80,0.15); color: #b4824f; }
+    .priority-rank.rank-4 { background: rgba(140,140,170,0.1); color: #8c8caa; }
+    .priority-info { flex: 1; }
+    .priority-type {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #7a6ae0;
+      margin-bottom: 2px;
+    }
+    .priority-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d0c8f0;
+    }
+    .priority-note {
+      font-size: 12px;
+      color: #8888aa;
+      margin-top: 2px;
+    }
+    .team-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .team-row:last-child { margin-bottom: 0; }
+    .team-block {
+      flex: 1;
+      min-width: 280px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .team-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8888aa;
+      margin-bottom: 12px;
+    }
+    .team-slots { display: flex; gap: 12px; }
+    .team-slot { flex: 1; text-align: center; }
+    .team-slot-icon {
+      width: 56px; height: 56px;
+      border-radius: 12px;
+      margin: 0 auto 6px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(255,255,255,0.08);
+      overflow: hidden;
+      background: #1a1d45;
+      position: relative;
+    }
+    .team-slot-icon img { width: 100%; height: 100%; object-fit: cover; }
+    .team-slot-icon img.alt-icon {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+    .team-slot-icon img.alt-icon:first-child {
+      animation: flashA 2s infinite;
+    }
+    .team-slot-icon img.alt-icon:nth-child(2) {
+      animation: flashB 2s infinite;
+    }
+    @keyframes flashA {
+      0%, 45%   { opacity: 1; }
+      50%, 95%  { opacity: 0; }
+      100%      { opacity: 1; }
+    }
+    @keyframes flashB {
+      0%, 45%   { opacity: 0; }
+      50%, 95%  { opacity: 1; }
+      100%      { opacity: 0; }
+    }
+    .team-slot-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: #d0c8f0;
+    }
+    .team-slot-role {
+      font-size: 10px;
+      color: #7a7ca0;
+      margin-top: 1px;
+    }
+    .team-note {
+      font-size: 12px;
+      color: #8888aa;
+      margin-top: 12px;
+      line-height: 1.5;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    .invest-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .invest-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .invest-card-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #8888aa;
+      margin-bottom: 8px;
+    }
+    .invest-card-value {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .invest-card-note {
+      font-size: 11px;
+      color: #7a7ca0;
+    }
+    .grade-s { color: #f0c040; }
+    .grade-a { color: #60d080; }
+    .grade-b { color: #60a0e0; }
+    .invest-summary {
+      padding: 16px;
+      background: rgba(106,90,205,0.06);
+      border: 1px solid rgba(106,90,205,0.12);
+      border-radius: 10px;
+    }
+    .invest-summary h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #c0b0f0;
+      margin-bottom: 8px;
+    }
+    .invest-summary p {
+      font-size: 13px;
+      line-height: 1.7;
+      color: #a0a0c0;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #2a2d5a; border-radius: 3px; }
+    @media (max-width: 1000px) {
+      .wiki-top { grid-template-columns: 1fr; }
+      .char-portrait { width: 220px; }
+      .wiki-sections { grid-template-columns: 1fr; }
+      .invest-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .main { padding: 16px; }
+      .char-portrait { width: 180px; }
+      .invest-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main">
+    <a href="https://akaerya.github.io/" class="back-btn">← Back to Characters</a>
+
+    <div class="wiki-top">
+      <div class="left-col">
+        <div class="char-portrait">
+          <img src="/images/character/welt.webp" alt="Welt">
+        </div>
+        <div class="info-box">
+          <div class="info-box-header">Character Info</div>
+          <div class="info-row">
+            <span class="info-label">Rarity</span>
+            <span class="info-value stars">★★★★★</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Path</span>
+            <span class="info-value">
+              <img src="/images/nihility.webp" alt="Nihility"> Nihility
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Element</span>
+            <span class="info-value">
+              <img src="/images/imaginary.webp" alt="Imaginary"> Imaginary
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Faction</span>
+            <span class="info-value">Astral Express</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">World</span>
+            <span class="info-value">Earth</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-col">
+        <div class="char-name-block">
+          <h1>Welt</h1>
+          <div class="subtitle">"The galaxy is vast beyond compare, containing an infinite number of possibilities. An individual's fate shouldn't be limited to a single path ordained by heaven."</div>
+        </div>
+        <div class="char-stars-lg">★★★★★</div>
+        <div class="description-box" style="margin-bottom: 16px;">
+          <h3>Character Summary</h3>
+          <p>Welt is a debuffer who can function both as a DPS or a support depending on how you build him. He provides a very substantial (40%) DEF shred debuff, a DMG% buff, and at higher eidolons, 30% RES down. He also reduces enemy SPD and can delay enemies, which gives him slightly better defensive capabilities than other DPSes or even supports if enemies are not able to take many turns from his delay and slow.</p>
+          <p>While Welt has very notable damage multipliers in his kit through his Skill and Talent, he has a very steep EHR requirement alongside having to build CR/CD on him, which makes building Welt as a DPS extremely difficult without his E6, usually requiring 28-32 substats for him and specific supports like Sunday to be a viable DPS. He is easier to build as a support, but his damage amplification is better than other supports only at E4, though his delay+slow utility can help with reducing damage taken in sustainless runs at E2 or higher.</p>
+        </div>
+        <div class="description-box">
+          <h3>Build Notes</h3>
+          <p>Recommended build is for hypercarry Welt. Recommended stats assume that you are running Sunday in this team, as Welt requires too many substats to reach all of his recommended stats + 100% CR reliably by himself. If you are running Welt as a pure support, focus on hitting 80% EHR + as much SPD as possible.</p>
+          <p>EHR: 66.7% is the minimum EHR required to land Weightless against 40% ERES enemies. However, you can aim for 80% to maximise his EHR to ATK conversion, but it is not needed. If you are using Welt's signature LC, you can aim for lower EHR (about 50% EHR) in exchange for more crit substats.</p>
+          <p>CR/CD: Subtract 4% CR/24% CD if you are using Pioneer 4pc.</p>
+          <p>SPD: If you are using Sparkle + Sunday, use ATK boots and base speed. If you are using Sunday only, aim for 133.34 SPD. If you are running Welt as purely a support, aim for as fast as possible while ignoring all crit recommendations.</p>
+          <p>Rope: If your Welt is E2, you can use ERR rope for 2-turn Ultimates, but this is more for a support Welt than a DPS Welt build.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="wiki-sections">
+
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">✦</span> Recommended Stats (out of combat)
+        </div>
+        <div class="section-body">
+          <div class="stat-toggle-wrap">
+            <div class="stat-toggle-btn" id="statToggle" onclick="toggleStats()"></div>
+            <span class="stat-toggle-label active-label" id="statToggleLabel">E0S0</span>
+          </div>
+
+          <div class="stat-panel" id="statPanel">
+            <div class="stat-table" id="statsE0S0">
+              <div class="stat-section-label"><b>E0S0 (In the Name of the World)</b></div>
+              <ul class="trace-list">
+                <li><span>EHR</span> <span class="trace-val">50% - 60%</span></li>
+                <li><span>CRIT Rate</span> <span class="trace-val">80%+</span></li>
+                <li><span>CRIT DMG</span> <span class="trace-val">110%+</span></li>
+                <li><span>SPD</span> <span class="trace-val">102 / 133.34+</span></li>
+              </ul>
+            </div>
+
+            <div class="stat-table hidden" id="statsE0S1">
+              <div class="stat-section-label"><b>5* E0S1 (Incessant Rain)</b></div>
+              <ul class="trace-list">
+                <li><span>EHR</span> <span class="trace-val">66.7% - 80%</span></li>
+                <li><span>CRIT Rate</span> <span class="trace-val">80%+</span></li>
+                <li><span>CRIT DMG</span> <span class="trace-val">130%+</span></li>
+                <li><span>SPD</span> <span class="trace-val">102 / 133.34+</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="stat-section-label"><b>Mainstat Priority</b></div>
+          <ul class="mainstat-list" id="mainstatList">
+                <li><span class="mainstat-slot">Body:</span> <span class="mainstat-val">CR or EHR</span></li>
+                <li><span class="mainstat-slot">Boots:</span> <span class="mainstat-val">ATK or SPD</span></li>
+                <li><span class="mainstat-slot">Sphere:</span> <span class="mainstat-val">DMG > ATK</span></li>
+                <li><span class="mainstat-slot">Rope:</span> <span class="mainstat-val">ATK or ERR</span></li>
+          </ul>
+          <div class="stat-section-label" style="margin-top:12px;"><b>Substat Priority</b></div>
+          <div class="rec-desc">SPD (until breakpoint) = EHR (until breakpoint) > CR > CD > ATK</div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">◈</span> Recommended Light Cones / Relic Sets
+        </div>
+        <div class="section-body">
+          <h4>Light Cones</h4>
+          <div class="rec-entry">
+            <div class="rec-name">Incessant Rain S1 <span class="rec-tag bis">BiS</span></div>
+            <div class="rec-desc">Silver Wolf's signature LC and most comfortable LC option for building hypercarry Welt. Provides unconditional EHR and CR (both stats that Welt really wants), and while the vulnerability debuff of this LC is single target and has poor uptime, it can be applied frequently and is a small damage amp for the team.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Along the Passing Shore S1 <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Acheron's signature LC, and theoretical best LC for Welt for high relic investment Welt builds (66.7-80% EHR with 20+ crit substats). Provides CD% and DMG%, but it does not provide any stats that makes Welt easier to build, which means that this LC can perform worse than other LCs below this if Welt does not have enough EHR or CR in particular. </div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">In the Name of the World S1+ <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Welt's signature LC and makes Welt easier to build. Provides DMG% and ATK%, and while this LC only provides EHR for his Skill only (which does not convert to additional ATK% from his A6), it allows you to get away with lower EHR on Welt (60% or less) since he is able to inflict Slow on his Skill more easily (needed for his additional DMG procs), making him less reliant on his Ultimate to inflict Slow.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Boundless Choreo S5 <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Best 4* option as it provides 16% CR and 48% CD, which allows you to focus much more on building EHR instead.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Resolution Shines as Pearls of Sweat S5 <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Best 4* option for a pure support Welt; Cipher's signature LC has the best damage amp for support Welt.</div>
+          </div>
+
+          <h4 style="margin-top:20px;">Relic Sets</h4>
+          <div class="rec-entry">
+            <div class="rec-name">Pioneer Diver of Dead Waters <span class="rec-tag bis">BiS</span></div>
+            <div class="rec-desc">His general best set as he can inflict 3 debuffs consistently and provides DMG% and CR/CD which he generally lacks. </div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Wastelander of Banditry Desert <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Similar damage amp to Pioneer 4pc (10% DMG, 10% CR and 20% CD), but this set has a harder secondary effect to trigger as it requires enemies to be Imprisoned, which is more difficult to do against certain enemies in endgame content. Regardless, this is still a great set if you have pieces from this back in 1.x.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">2pc Crit / 2pc Crit <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">For if you don't have any of the above 4pcs.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Eagle of Twilight Line <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">For a purely support Welt build. At E2 + ERR rope, he gets 2-turn Ultimates, which allows Welt to get an effective 14.3% total SPD increase from this set.</div>
+          </div>
+
+          <h4 style="margin-top:20px;">Planar Ornaments</h4>
+          <div class="rec-entry">
+            <div class="rec-name">Pan-Cosmic Commercial Enterprise <span class="rec-tag bis">BiS</span></div>
+            <div class="rec-desc">Best unconditional planar for Welt since it provides 10% EHR and a bit of ATK% for all of his attacks. No other planar is unconditionally good for him.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Rutilant Arena <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Provides 8% CR, but the Skill DMG% increase is not very significant since a bit more than half of his DMG is from his additional DMG procs from his Talent.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Firmament Frontline: Glamoth <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Conditionally good planar on Welt if you are building speed on Welt. Provides 12% ATK and 12% DMG if he reaches 135+ SPD, but otherwise it is only a 12% ATK planar without any SPD on him.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">The Wondrous BananAmusement Park <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Theoretical best damage amplification planar for Welt (48% CD), but it locks you to using DHPT in the team.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Sprightly Vonwacq <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">For a support Welt build. The 40% advance at the start of Wave 1 can be used to delay faster enemies earlier to avoid damage taken.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">⚙</span> Trace Priority
+        </div>
+        <div class="section-body">
+          <h4>Character Traces</h4>
+          <div class="priority-item">
+            <div class="priority-rank rank-1">1</div>
+            <div class="priority-info">
+              <div class="priority-type">Skill</div>
+              <div class="priority-name" data-trace-type="Skill">Edge of the Void</div>
+              <div class="priority-note">Secondary source of his damage and affects the base chance of landing Slow (enables his Talent) on his Skill. High priority.</div>
+            </div>
+          </div>
+          <div class="priority-item">
+            <div class="priority-rank rank-1">1</div>
+            <div class="priority-info">
+              <div class="priority-type">Talent</div>
+              <div class="priority-name" data-trace-type="Talent">Time Distortion</div>
+              <div class="priority-note">Main source of his damage. High priority.</div>
+            </div>
+          </div>
+          <div class="priority-item">
+            <div class="priority-rank rank-3">3</div>
+            <div class="priority-info">
+              <div class="priority-type">Ultimate</div>
+              <div class="priority-name" data-trace-type="Ultimate">Synthetic Black Hole</div>
+              <div class="priority-note">Secondary source of his damage and affects his E1 damage procs. Medium to high priority.</div>
+            </div>
+          </div>
+          <div class="priority-item">
+            <div class="priority-rank rank-4">4</div>
+            <div class="priority-info">
+              <div class="priority-type">Basic ATK</div>
+              <div class="priority-name" data-trace-type="Basic ATK">Gravity Suppression</div>
+              <div class="priority-note">You should ideally never be using this. Low priority.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="wiki-section-full">
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">👥</span> Team Suggestions
+        </div>
+        <div class="section-body">
+          <div class="team-row">
+            <div class="team-block">
+              <div class="team-label">Welt Hypercarry</div>
+              <div class="team-slots">
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Welt_Icon.webp" alt="Welt"></div>
+                  <div class="team-slot-name">Welt</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Sunday_Icon.webp" alt="Sunday"></div>
+                  <div class="team-slot-name">Sunday</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon">
+                    <img class="alt-icon" src="/images/small/Character_Sparkle_Icon.webp" alt="Sparkle">
+                    <img class="alt-icon" src="/images/small/Character_Cerydra_Icon.webp" alt="Cerydra">
+                  </div>
+                  <div class="team-slot-name">Sparkle/Cerydra</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon">
+                    <img class="alt-icon" src="/images/small/Character_DHPT_Icon.webp" alt="DHPT">
+                    <img class="alt-icon" src="/images/small/Character_Ashveil_Icon.webp" alt="Ashveil">
+                  </div>
+                  <div class="team-slot-name">DHPT/Ashveil</div>
+                  <div class="team-slot-role">Flex</div>
+                </div>
+              </div>
+              <div class="team-note">His general best hypercarry team, with Sunday being essential pre-E6 as Welt strongly needs CR/CD without very high relic investment. Sparkle is Welt's second best support in terms of comfort as it allows Welt to run ATK boots and base speed, further easing relic requirements on her, but Cerydra is a good alternative if Sparkle is taken in a different team. DHPT provides the best offensive buffs to Welt for a sustain, but if enemy damage is less of an issue, you can replace DHPT with RMC or Ashveil.</div>
+            </div>
+            <div class="team-block">
+              <div class="team-label">Ashveil Hypercarry</div>
+              <div class="team-slots">
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Ashveil_Icon.webp" alt="Ashveil"></div>
+                  <div class="team-slot-name">Ashveil</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Sunday_Icon.webp" alt="Sunday"></div>
+                  <div class="team-slot-name">Sunday</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Welt_Icon.webp" alt="Welt"></div>
+                  <div class="team-slot-name">Welt</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_DHPT_Icon.webp" alt="DHPT"></div>
+                  <div class="team-slot-name">DHPT</div>
+                  <div class="team-slot-role">Sustain</div>
+                </div>
+              </div>
+              <div class="team-note">While Welt has lower attack frequency than Tribbie or Cipher even with an Eagle build, he provides much stronger damage amplification than either ally, which makes Welt a good support for Ashveil if energy generation on Ashveil is less of an issue. If sustain is less of a concern, you can replace DHPT with Tribbie, Cipher or RMC in shorter fights.</div>
+            </div>
+          </div>
+          <div class="team-row">
+            <div class="team-block">
+              <div class="team-label">Acheron Hypercarry</div>
+              <div class="team-slots">
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Acheron_Icon.webp" alt="Acheron"></div>
+                  <div class="team-slot-name">Acheron</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Welt_Icon.webp" alt="Welt"></div>
+                  <div class="team-slot-name">Welt</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon">
+                    <img class="alt-icon" src="/images/small/Character_Cipher_Icon.webp" alt="Cipher">
+                    <img class="alt-icon" src="/images/small/Character_Silver_Wolf_Icon.webp" alt="Silver Wolf">
+                  </div>
+                  <div class="team-slot-name">Cipher/Silver Wolf</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Hyacine_Icon.webp" alt="Hyacine"></div>
+                  <div class="team-slot-name">Hyacine</div>
+                  <div class="team-slot-role">Sustain</div>
+                </div>
+              </div>
+              <div class="team-note">Provides a good balance of debuff application and damage amplification. Cipher is better for low target fights and a comfier option overall due to her SP positivity, while Silver Wolf is better for pure ST fights. Jiaoqiu is not recommended for this team as he has anti-synergy with Welt's delay/slow debuffs. If sustain is less of a concern, you can replace DHPT with Tribbie, Sparkle or RMC in shorter fights.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="wiki-section-full">
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">📊</span> Vertical Investment Analysis
+        </div>
+        <div class="section-body">
+          <div class="invest-grid">
+            <div class="invest-card">
+              <div class="invest-card-label">Sig LC (S1)</div>
+              <div class="invest-card-value grade-b">★★</div>
+              <div class="invest-card-note">Not possible to give a specific value since it heavily depends on how much relic investment Welt has, but it ranges from 5-10% with low investment Welt builds with SW's LC to about 20% with high relic (32+ substats) investment Welt builds with Acheron's LC compared to Welt's signature LC.</div>
+            </div>
+            <div class="invest-card">
+              <div class="invest-card-label">Teammates</div>
+              <div class="invest-card-value grade-a">★★★</div>
+              <div class="invest-card-note">Aside from E4 and E6 Welt, you are better off investing into supports such as E0S1 Sunday, E2 Sparkle, E1 DHPT or S1 Ashveil (all provide about a 15-20% damage increase per premium pull). </div>
+            </div>
+            <div class="invest-card">
+              <div class="invest-card-label">E1</div>
+              <div class="invest-card-value grade-b">★</div>
+              <div class="invest-card-note">Less than a 10% damage increase in practice since his Skill/Talent damage is already so high.</div>
+            </div>
+            <div class="invest-card">
+              <div class="invest-card-label">E2</div>
+              <div class="invest-card-value grade-a">★★★</div>
+              <div class="invest-card-note">Enables 2-turn Ultimates with ERR rope (excellent for support Welt), and puts him very close to a 2-turn Ultimate with ATK rope.</div>
+            </div>
+            <div class="invest-card">
+              <div class="invest-card-label">E4</div>
+              <div class="invest-card-value grade-s">★★★★</div>
+              <div class="invest-card-note">A 30% damage increase minimum for both support and DPS Welt, with the damage increase being higher against enemies with more than 0% element RES.</div>
+            </div>
+            <div class="invest-card">
+              <div class="invest-card-label">E6</div>
+              <div class="invest-card-value grade-s">★★★★</div>
+              <div class="invest-card-note">Effectively 120% CD if optimally built, which results in a 25-30% damage increase for DPS Welt depending on supports. Damage increase is lower if you are running Welt as a support.</div>
+            </div>
+          </div>
+
+          <div class="invest-summary">
+            <h4>Investment Recommendation</h4>
+            <p>For his supports, Sunday S1 > Support E0S1/E1S0 (or E2 Sparkle) = DHPT E1. Welt E4 and E6 are larger improvements than Sunday S1. E2S1 Welt, E0S1 Sunday and E0S1 Sparkle, E1S0 Cerydra or E0S1 Ashveil would be the minimum investment required for him to be used as a DPS for harder endgame content.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let showingE0S1 = false;
+    function toggleStats() {
+      const toggle = document.getElementById('statToggle');
+      const label = document.getElementById('statToggleLabel');
+      const current = showingE0S1 ? document.getElementById('statsE0S1') : document.getElementById('statsE0S0');
+      const next = showingE0S1 ? document.getElementById('statsE0S0') : document.getElementById('statsE0S1');
+      showingE0S1 = !showingE0S1;
+      toggle.classList.toggle('active', showingE0S1);
+      label.textContent = showingE0S1 ? '5* E0S1 / 4* E6S5' : 'E0S0';
+      current.classList.add('fading-out');
+      setTimeout(() => {
+        current.classList.add('hidden');
+        current.classList.remove('fading-out');
+        next.classList.remove('hidden');
+        next.classList.add('fading-in');
+        void next.offsetWidth;
+        next.classList.remove('fading-in');
+      }, 300);
+    }
+  </script>
+</body>
+</html>
