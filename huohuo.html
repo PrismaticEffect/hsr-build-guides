@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Huohuo - Character Details</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0b0d1a;
+      color: #e0e0f0;
+      display: flex;
+      min-height: 100vh;
+    }
+    .main {
+      margin-left: 0px;
+      flex: 1;
+      padding: 32px 36px;
+      max-width: 1400px;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: #14163a;
+      color: #a0a0c0;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 28px;
+      text-decoration: none;
+    }
+    .back-btn:hover { border-color: #6a5acd; color: #e0e0f0; }
+    .wiki-top {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+    .left-col { display: flex; flex-direction: column; gap: 20px; }
+    .char-portrait {
+      width: 280px;
+      aspect-ratio: 1 / 1.15;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(160deg, #2a1a4a 0%, #1a1040 50%, #301a50 100%);
+    }
+    .char-portrait img { width: 100%; height: 100%; object-fit: cover; }
+    .info-box {
+      background: #12142e;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .info-box-header {
+      background: linear-gradient(135deg, #1e1a45, #2a2060);
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #c0c0f0;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-label { color: #8888aa; font-weight: 500; }
+    .info-value {
+      color: #d0d0f0;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .info-value img { width: 20px; height: 20px; border-radius: 4px; }
+    .stars { color: #f0c040; letter-spacing: 1px; }
+    .right-col { display: flex; flex-direction: column; }
+    .char-name-block { margin-bottom: 8px; }
+    .char-name-block h1 {
+      font-size: 36px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .char-name-block .subtitle {
+      font-size: 14px;
+      color: #8888aa;
+      font-style: italic;
+    }
+    .char-stars-lg {
+      font-size: 20px;
+      color: #f0c040;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+    .description-box {
+      background: #12142e;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 24px;
+      flex: 1;
+    }
+    .description-box h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #c0b0f0;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .description-box p {
+      font-size: 14px;
+      line-height: 1.75;
+      color: #b0b0d0;
+    }
+    .description-box p + p { margin-top: 12px; }
+    .wiki-sections {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .wiki-section-full { margin-bottom: 20px; }
+    .section-card {
+      background: #12142e;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .section-card:hover { border-color: rgba(106,90,205,0.3); }
+    .section-header {
+      background: linear-gradient(135deg, #1e1a45, #2a2060);
+      padding: 14px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #c0c0f0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-header .icon {
+      width: 20px; height: 20px;
+      border-radius: 6px;
+      background: rgba(106,90,205,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+    }
+    .section-body { padding: 20px; }
+    .section-body p {
+      font-size: 13px;
+      line-height: 1.7;
+      color: #a0a0c0;
+    }
+    .section-body h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d0c8f0;
+      margin-bottom: 8px;
+    }
+    .trace-list { list-style: none; }
+    .trace-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px;
+      color: #a0a0c0;
+      display: flex;
+      justify-content: space-between;
+    }
+    .trace-list li:last-child { border-bottom: none; }
+    .trace-val { color: #d0c8f0; font-weight: 500; }
+    .stat-section-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8888aa;
+      margin-bottom: 8px;
+      margin-top: 16px;
+    }
+    .stat-section-label:first-child { margin-top: 0; }
+    .stat-toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .stat-toggle-btn {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      border-radius: 11px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: #1a1d45;
+      cursor: pointer;
+      transition: background 0.25s, border-color 0.25s;
+      flex-shrink: 0;
+    }
+    .stat-toggle-btn.active {
+      background: linear-gradient(135deg, #3b2f7a, #5a3fa0);
+      border-color: #6a5acd;
+    }
+    .stat-toggle-btn::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #a0a0c0;
+      transition: transform 0.25s, background 0.25s;
+    }
+    .stat-toggle-btn.active::after {
+      transform: translateX(18px);
+      background: #fff;
+    }
+    .stat-toggle-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #a0a0c0;
+      transition: color 0.25s;
+      user-select: none;
+    }
+    .stat-toggle-label.active-label { color: #d0c8f0; }
+    .stat-panel { position: relative; }
+    .stat-table { transition: opacity 0.3s ease; }
+    .stat-table.hidden { display: none; }
+    .stat-table.fading-out { opacity: 0; }
+    .stat-table.fading-in { opacity: 0; }
+    .rec-entry { margin-bottom: 16px; }
+    .rec-entry:last-child { margin-bottom: 0; }
+    .rec-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d0c8f0;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .rec-tag {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: rgba(106,90,205,0.2);
+      color: #a090d0;
+    }
+    .rec-tag.bis {
+      background: rgba(240,192,64,0.15);
+      color: #f0c040;
+    }
+    .rec-desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #9090b0;
+    }
+    .mainstat-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .mainstat-list li {
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px;
+      color: #a0a0c0;
+    }
+    .mainstat-list li:last-child { border-bottom: none; }
+    .mainstat-slot {
+      font-weight: 600;
+      color: #8888aa;
+    }
+    .mainstat-val {
+      color: #d0c8f0;
+      font-weight: 500;
+    }
+    .priority-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .priority-item:last-child { border-bottom: none; }
+    .priority-rank {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .priority-rank.rank-1 { background: rgba(240,192,64,0.2); color: #f0c040; }
+    .priority-rank.rank-2 { background: rgba(192,192,210,0.15); color: #c0c0d2; }
+    .priority-rank.rank-3 { background: rgba(180,130,80,0.15); color: #b4824f; }
+    .priority-rank.rank-4 { background: rgba(140,140,170,0.1); color: #8c8caa; }
+    .priority-info { flex: 1; }
+    .priority-type {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #7a6ae0;
+      margin-bottom: 2px;
+    }
+    .priority-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d0c8f0;
+    }
+    .priority-note {
+      font-size: 12px;
+      color: #8888aa;
+      margin-top: 2px;
+    }
+    .team-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .team-row:last-child { margin-bottom: 0; }
+    .team-block {
+      flex: 1;
+      min-width: 280px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .team-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8888aa;
+      margin-bottom: 12px;
+    }
+    .team-slots { display: flex; gap: 12px; }
+    .team-slot { flex: 1; text-align: center; }
+    .team-slot-icon {
+      width: 56px; height: 56px;
+      border-radius: 12px;
+      margin: 0 auto 6px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(255,255,255,0.08);
+      overflow: hidden;
+      background: #1a1d45;
+      position: relative;
+    }
+    .team-slot-icon img { width: 100%; height: 100%; object-fit: cover; }
+    .team-slot-icon img.alt-icon {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+    .team-slot-icon img.alt-icon:first-child {
+      animation: flashA 2s infinite;
+    }
+    .team-slot-icon img.alt-icon:nth-child(2) {
+      animation: flashB 2s infinite;
+    }
+    @keyframes flashA {
+      0%, 45%   { opacity: 1; }
+      50%, 95%  { opacity: 0; }
+      100%      { opacity: 1; }
+    }
+    @keyframes flashB {
+      0%, 45%   { opacity: 0; }
+      50%, 95%  { opacity: 1; }
+      100%      { opacity: 0; }
+    }
+    .team-slot-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: #d0c8f0;
+    }
+    .team-slot-role {
+      font-size: 10px;
+      color: #7a7ca0;
+      margin-top: 1px;
+    }
+    .team-note {
+      font-size: 12px;
+      color: #8888aa;
+      margin-top: 12px;
+      line-height: 1.5;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    .invest-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .invest-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .invest-card-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #8888aa;
+      margin-bottom: 8px;
+    }
+    .invest-card-value {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .invest-card-note {
+      font-size: 11px;
+      color: #7a7ca0;
+    }
+    .grade-s { color: #f0c040; }
+    .grade-a { color: #60d080; }
+    .grade-b { color: #60a0e0; }
+    .invest-summary {
+      padding: 16px;
+      background: rgba(106,90,205,0.06);
+      border: 1px solid rgba(106,90,205,0.12);
+      border-radius: 10px;
+    }
+    .invest-summary h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #c0b0f0;
+      margin-bottom: 8px;
+    }
+    .invest-summary p {
+      font-size: 13px;
+      line-height: 1.7;
+      color: #a0a0c0;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #2a2d5a; border-radius: 3px; }
+    @media (max-width: 1000px) {
+      .wiki-top { grid-template-columns: 1fr; }
+      .char-portrait { width: 220px; }
+      .wiki-sections { grid-template-columns: 1fr; }
+      .invest-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .main { padding: 16px; }
+      .char-portrait { width: 180px; }
+      .invest-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main">
+    <a href="https://akaerya.github.io/" class="back-btn">← Back to Characters</a>
+
+    <div class="wiki-top">
+      <div class="left-col">
+        <div class="char-portrait">
+          <img src="/images/character/huohuo.webp" alt="Huohuo">
+        </div>
+        <div class="info-box">
+          <div class="info-box-header">Character Info</div>
+          <div class="info-row">
+            <span class="info-label">Rarity</span>
+            <span class="info-value stars">★★★★★</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Path</span>
+            <span class="info-value">
+              <img src="/images/abundance.webp" alt="Abundance"> Abundance
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Element</span>
+            <span class="info-value">
+              <img src="/images/wind.webp" alt="Wind"> Wind
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Faction</span>
+            <span class="info-value">The Xianzhou Luofu</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">World</span>
+            <span class="info-value">The Xianzhou Luofu</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-col">
+        <div class="char-name-block">
+          <h1>Huohuo</h1>
+          <div class="subtitle"></div>
+        </div>
+        <div class="char-stars-lg">★★★★★</div>
+        <div class="description-box" style="margin-bottom: 16px;">
+          <h3>Character Summary</h3>
+          <p>Huohuo is a healer/sustain who provides offensive support to the team, providing ATK to all allies and Energy equal to a proportion of an ally's Max Energy on her Ultimate. Huohuo's healing is split between her Skill and her Talent, the latter of which gives a small amount of healing on an ally's turn or Ultimate use to allies below 50% HP, the ally taking the turn, or the ally with the lowest HP. As a result, Huohuo' sustain is particularly resilient by having very fast teammates or teammates that take many turns.</p>
+          <p>With her Novaflare, Huohuo has become a slightly SP positive unit (1/3 SP per turn) and her healing capabilities were improved slightly. She also provides a larger ATK buff to units that have 160+ max energy, but this primarily affects Saber and Aglaea. Due to her harder to access emergency healing and lack of effective HP increase, Huohuo is weaker than DHPT or Hyacine in terms of sustain, but her buffs and energy battery makes her useful in many teams, especially if they have high enough damage output to avoid being hit too often.</p>
+        </div>
+        <div class="description-box">
+          <h3>Build Notes</h3>
+          <p>SPD: Subtract 5.88 SPD if you are using 4pc Warrior Goddess. Ideally, Huohuo should be as fast as possible to proc her emergency healing more, as long as you maintain a healthy balance of SPD and HP substats.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="wiki-sections">
+
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">✦</span> Recommended Stats (out of combat)
+        </div>
+        <div class="section-body">
+          <div class="stat-toggle-wrap">
+            <div class="stat-toggle-btn" id="statToggle" onclick="toggleStats()"></div>
+            <span class="stat-toggle-label active-label" id="statToggleLabel">E0S0</span>
+          </div>
+
+          <div class="stat-panel" id="statPanel">
+            <div class="stat-table" id="statsE0S0">
+              <div class="stat-section-label"><b>E0S0 (Quid Pro Quo)</b></div>
+              <ul class="trace-list">
+                <li><span>HP</span> <span class="trace-val">5400+</span></li>
+                <li><span>SPD</span> <span class="trace-val">160+</span></li>
+              </ul>
+            </div>
+
+            <div class="stat-table hidden" id="statsE0S1">
+              <div class="stat-section-label"><b>5* E0S1 (Night of Fright)</b></div>
+              <ul class="trace-list">
+                <li><span>HP</span> <span class="trace-val">5900+</span></li>
+                <li><span>SPD</span> <span class="trace-val">160+</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="stat-section-label"><b>Mainstat Priority</b></div>
+          <ul class="mainstat-list" id="mainstatList">
+                <li><span class="mainstat-slot">Body:</span> <span class="mainstat-val">OHB > HP</span></li>
+                <li><span class="mainstat-slot">Boots:</span> <span class="mainstat-val">SPD</span></li>
+                <li><span class="mainstat-slot">Sphere:</span> <span class="mainstat-val">HP</span></li>
+                <li><span class="mainstat-slot">Rope:</span> <span class="mainstat-val">ERR</span></li>
+          </ul>
+          <div class="stat-section-label" style="margin-top:12px;"><b>Substat Priority</b></div>
+          <div class="rec-desc">SPD = HP</div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">◈</span> Recommended Light Cones / Relic Sets
+        </div>
+        <div class="section-body">
+          <h4>Light Cones</h4>
+          <div class="rec-entry">
+            <div class="rec-name">Night of Fright S1 <span class="rec-tag bis">BiS</span></div>
+            <div class="rec-desc">Huohuo's signature LC and general best LC, but not much better than cheaper alternatives. Provides enough ERR% to ensure a 3-turn Ultimate through spamming Skills, provides a 12 ATK% buff to all allies, and improves her emergency healing.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Shared Feeling S5 <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Best 4* LC if you are spamming skills with Huohuo. Provides a bit of Outgoing Healing boost (good for her sustain) and generates a bit of Energy for all allies every time Huohuo uses a Skill, and this LC also ensures a 3-turn Ultimate with a skill spam rotation.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Post-Op Conversation S5 <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Decent 4* LC for teams where you cannot consume much SP with Huohuo, this LC enables a 4-turn Ultimate rotation while ensuring that Huohuo remains SP positive. However, Huohuo cannot benefit from the Outgoing Healing boost from this LC.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Until Tomorrow's Morrow S5 <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">BP option which focuses more on offensive utility; this LC gives a bit of Outgoing Healing boost while also providing a DMG% boost to all allies with 50% or more HP.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Quid Pro Quo S5 <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Decent 4* LC for teams where you cannot consume much SP with Huohuo, this LC gives 16 energy to any ally with less than 50% energy on Huohuo's turn, which might be integral for some allies' rotations. However, this LC does not provide any improvement to her sustain.</div>
+          </div>
+
+          <h4 style="margin-top:20px;">Relic Sets</h4>
+          <div class="rec-entry">
+            <div class="rec-name">Warrior Goddess of Sky and Thunder <span class="rec-tag bis">BiS</span></div>
+            <div class="rec-desc">Her best relic set for offensive utility as it provides her with 12% SPD in total and 15% CD to all allies. General best set for crit-scaling teams.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">2pc SPD / 2pc SPD <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">For if you don't have a good Warrior Goddess 4pc.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Passerby of Wandering Cloud <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">A good option since it improves Huohuo's Outgoing Healing and provides 1 SP at the start of combat, which can be useful for some teams like Sparxie teams, but the extra SP is not super useful for most Huohuo teams post-Novaflare.</div>
+          </div>
+
+          <h4 style="margin-top:20px;">Planar Ornaments</h4>
+          <div class="rec-entry">
+            <div class="rec-name">Broken Keel <span class="rec-tag bis">BiS</span></div>
+            <div class="rec-desc">General best planar for Elation teams as it gives the entire team 10% CD, and Huohuo only requires 1 ERES substat to hit the 30% Effect RES requirement because of her traces.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">City of Converging Stars <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Excellent planar for crit scaling teams and more efficient to farm for Elation teams. Similar to Broken Keel, this planar provides 12% CD to all teammates, but it requires an enemy kill whereas Broken Keel's CD increase is unconditional. </div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Lushaka, the Sunken Seas <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Good and efficient planar to farm, providing 12% ATK to one character and a small ERR% increase which is useful for getting a comfortable 4-turn Ultimate rotation.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Fleet of the Ageless <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Good planar as it improves Huohuo's healing and provides the entire team with 8% ATK, but this planar is generally worse than Broken Keel outside of triple DoT teams specifically.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">⚙</span> Trace Priority
+        </div>
+        <div class="section-body">
+          <h4>Character Traces</h4>
+          <div class="priority-item">
+            <div class="priority-rank rank-1">1</div>
+            <div class="priority-info">
+              <div class="priority-type">Ultimate</div>
+              <div class="priority-name" data-trace-type="Ultimate">Tail: Spiritual Domination</div>
+              <div class="priority-note">Affects how much Energy she can provide and her ATK% buff. High priority.</div>
+            </div>
+          </div>
+          <div class="priority-item">
+            <div class="priority-rank rank-1">1</div>
+            <div class="priority-info">
+              <div class="priority-type">Talent</div>
+              <div class="priority-name" data-trace-type="Talent">Possession: Ethereal Metaflow</div>
+              <div class="priority-note">Affects Huohuo's emergency healing and healing on ally's turns, which is a notable source of her sustain. High priority.</div>
+            </div>
+          </div>
+          <div class="priority-item">
+            <div class="priority-rank rank-3">3</div>
+            <div class="priority-info">
+              <div class="priority-type">Skill</div>
+              <div class="priority-name" data-trace-type="Skill">Talisman: Protection</div>
+              <div class="priority-note">Affects her more active healing, in which its importance depends on how often you use Huohuo's Skill. Medium to high priority.</div>
+            </div>
+          </div>
+          <div class="priority-item">
+            <div class="priority-rank rank-4">4</div>
+            <div class="priority-info">
+              <div class="priority-type">Basic ATK</div>
+              <div class="priority-name" data-trace-type="Basic ATK">Banner: Stormcaller</div>
+              <div class="priority-note">Does not contribute to Huohuo's kit other than generating SP. Low priority.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="wiki-section-full">
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">👥</span> Team Suggestions
+        </div>
+        <div class="section-body">
+          <div class="team-row">
+            <div class="team-block">
+              <div class="team-label">Evanescia Hypercarry</div>
+              <div class="team-slots">
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Evanescia_Icon.webp" alt="Evanescia"></div>
+                  <div class="team-slot-name">Evanescia</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Yao_Guang_Icon.webp" alt="Yao Guang"></div>
+                  <div class="team-slot-name">Yao Guang</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_EMC_Icon.webp" alt="EMC"></div>
+                  <div class="team-slot-name">EMC</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Huohuo_Icon.webp" alt="Huohuo"></div>
+                  <div class="team-slot-name">Huohuo</div>
+                  <div class="team-slot-role">Sustain</div>
+                </div>
+              </div>
+              <div class="team-note">Huohuo's general best use case since all of the units in this team (aside from herself) are very Ultimate-reliant, and Huohuo helps to speed up the Ultimate rotations for all three teammates. Evanescia in particular gains quite a bit of Certified Banger from Huohuo's Ultimate, which increases her Ultimate DMG output, and Yao Guang needs energy sources like Shared Feeling and Huohuo's Ultimate to ensure a consistent 3 turn ultimate rotation. Yao Guang providing SP through her Elation Skill also makes it possible to use Huohuo's Skill more aggressively, which can be used to speed up her Ultimate rotation, which gives further energy to the rest of the team.</div>
+            </div>
+            <div class="team-block">
+              <div class="team-label">SW999 Dual Carry</div>
+              <div class="team-slots">
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_SW999_Icon.webp" alt="SW999"></div>
+                  <div class="team-slot-name">SW999</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Sparxie_Icon.webp" alt="Sparxie"></div>
+                  <div class="team-slot-name">Sparxie</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Yao_Guang_Icon.webp" alt="Yao Guang"></div>
+                  <div class="team-slot-name">Yao Guang</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Huohuo_Icon.webp" alt="Huohuo"></div>
+                  <div class="team-slot-name">Huohuo</div>
+                  <div class="team-slot-role">Sustain</div>
+                </div>
+              </div>
+              <div class="team-note">While less useful than in Evanescia teams since SW999 does not have a normal Energy system, Huohuo provides integral energy for Yao Guang, and Sparxie also gets a comfortable 3-turn Ultimate rotation from Huohuo's energy battery, which greatly helps with SP economy. All of the units in this team are also quite fast (SW and YG being over 180 SPD and Sparxie being around 140+), which makes Huohuo's healing on Talent fairly potent. </div>
+            </div>
+          </div>
+          <div class="team-row">
+            <div class="team-block">
+              <div class="team-label">Saber Hypercarry</div>
+              <div class="team-slots">
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Saber_Icon.webp" alt="Saber"></div>
+                  <div class="team-slot-name">Saber</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon">
+                    <img class="alt-icon" src="/images/small/Character_Sunday_Icon.webp" alt="Sunday">
+                    <img class="alt-icon" src="/images/small/Character_Sparkle_Icon.webp" alt="Sparkle">
+                  </div>
+                  <div class="team-slot-name">Sunday/Sparkle</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Tribbie_Icon.webp" alt="Tribbie"></div>
+                  <div class="team-slot-name">Tribbie</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Huohuo_Icon.webp" alt="Huohuo"></div>
+                  <div class="team-slot-name">Huohuo</div>
+                  <div class="team-slot-role">Sustain</div>
+                </div>
+              </div>
+              <div class="team-note">Huohuo's energy battery on Ultimate greatly helps to activate Ultimates for all of her other teammates, which also helps Saber gain enough energy for her Ultimate as well. Saber is a slightly SP positive DPS, which enables Huohuo to have a skill spam rotation, making her cycle through her Ultimates faster than she would in usual teams, which in turn, would activate more Ultimates from other teammates. Saber also gains a notable 64% ATK buff from Huohuo on Ultimate use, but the buff uptime can make optimising Saber's damage a bit difficult.</div>
+            </div>
+            <div class="team-block">
+              <div class="team-label">Triple DoT</div>
+              <div class="team-slots">
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Black_Swan_Icon.webp" alt="Black Swan"></div>
+                  <div class="team-slot-name">Black Swan</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Hysilens_Icon.webp" alt="Hysilens"></div>
+                  <div class="team-slot-name">Hysilens</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Kafka_Icon.webp" alt="Kafka"></div>
+                  <div class="team-slot-name">Kafka</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Huohuo_Icon.webp" alt="Huohuo"></div>
+                  <div class="team-slot-name">Huohuo</div>
+                  <div class="team-slot-role">Sustain</div>
+                </div>
+              </div>
+              <div class="team-note">In fights where there is not much hit energy or kill energy, Huohuo's energy battery helps with ensuring that Kafka gets a 1-turn Ultimate rotation, and Hysilens gets enough energy to use her Ultimate and her Zone every 3 turns. In shorter fights with a lot of hit/kill energy, Huohuo's energy battery might be enough to squeeze an extra Hysilens ultimate over 300 AV, which is a nice source of damage. However, due to the SP strain of this team (both Kafka and Hysilens want to use their skills as often as possible), Huohuo has to be played SP positively in this team, which might slow down Huohuo's Ultimate generation without enough environmental energy from hits.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="wiki-section-full">
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">📊</span> Vertical Investment Analysis
+        </div>
+        <div class="section-body">
+          <div class="invest-grid">
+            <div class="invest-card">
+              <div class="invest-card-label">Sig LC (S1)</div>
+              <div class="invest-card-value grade-b">★</div>
+              <div class="invest-card-note">Less than a 5% damage increase from 4* choices and does not provide much utility that other 4* LCs can't provide.</div>
+            </div>
+            <div class="invest-card">
+              <div class="invest-card-label">Teammates</div>
+              <div class="invest-card-value grade-s">★★★★★</div>
+              <div class="invest-card-note">Most DPSes and supports have much better vertical investment than Huohuo.</div>
+            </div>
+            <div class="invest-card">
+              <div class="invest-card-label">E1</div>
+              <div class="invest-card-value grade-b">★★</div>
+              <div class="invest-card-note">Improves her healing slightly, makes her an even more SP positive unit (1/2 SP per turn), and gives 12% SPD to all allies, which is situationally good for hitting certain SPD breakpoints and it improves SW999's Elation in particular.</div>
+            </div>
+            <div class="invest-card">
+              <div class="invest-card-label">E2</div>
+              <div class="invest-card-value grade-b">★</div>
+              <div class="invest-card-note">Gives your team 2 free revives which your team should never be using in the first place.</div>
+            </div>
+          </div>
+
+          <div class="invest-summary">
+            <h4>Investment Recommendation</h4>
+            <p>Huohuo is already a complete unit at E0S0, but if you can really benefit from the SPD boost from E1, you can aim for E1S0. Further investment into Huohuo is not recommended and it should be put into your DPSes or supports.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let showingE0S1 = false;
+    function toggleStats() {
+      const toggle = document.getElementById('statToggle');
+      const label = document.getElementById('statToggleLabel');
+      const current = showingE0S1 ? document.getElementById('statsE0S1') : document.getElementById('statsE0S0');
+      const next = showingE0S1 ? document.getElementById('statsE0S0') : document.getElementById('statsE0S1');
+      showingE0S1 = !showingE0S1;
+      toggle.classList.toggle('active', showingE0S1);
+      label.textContent = showingE0S1 ? '5* E0S1 / 4* E6S5' : 'E0S0';
+      current.classList.add('fading-out');
+      setTimeout(() => {
+        current.classList.add('hidden');
+        current.classList.remove('fading-out');
+        next.classList.remove('hidden');
+        next.classList.add('fading-in');
+        void next.offsetWidth;
+        next.classList.remove('fading-in');
+      }, 300);
+    }
+  </script>
+</body>
+</html>
