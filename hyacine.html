@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hyacine - Character Details</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0b0d1a;
+      color: #e0e0f0;
+      display: flex;
+      min-height: 100vh;
+    }
+    .main {
+      margin-left: 0px;
+      flex: 1;
+      padding: 32px 36px;
+      max-width: 1400px;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: #14163a;
+      color: #a0a0c0;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 28px;
+      text-decoration: none;
+    }
+    .back-btn:hover { border-color: #6a5acd; color: #e0e0f0; }
+    .wiki-top {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+    .left-col { display: flex; flex-direction: column; gap: 20px; }
+    .char-portrait {
+      width: 280px;
+      aspect-ratio: 1 / 1.15;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(160deg, #2a1a4a 0%, #1a1040 50%, #301a50 100%);
+    }
+    .char-portrait img { width: 100%; height: 100%; object-fit: cover; }
+    .info-box {
+      background: #12142e;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .info-box-header {
+      background: linear-gradient(135deg, #1e1a45, #2a2060);
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #c0c0f0;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-label { color: #8888aa; font-weight: 500; }
+    .info-value {
+      color: #d0d0f0;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .info-value img { width: 20px; height: 20px; border-radius: 4px; }
+    .stars { color: #f0c040; letter-spacing: 1px; }
+    .right-col { display: flex; flex-direction: column; }
+    .char-name-block { margin-bottom: 8px; }
+    .char-name-block h1 {
+      font-size: 36px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .char-name-block .subtitle {
+      font-size: 14px;
+      color: #8888aa;
+      font-style: italic;
+    }
+    .char-stars-lg {
+      font-size: 20px;
+      color: #f0c040;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+    .description-box {
+      background: #12142e;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 24px;
+      flex: 1;
+    }
+    .description-box h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #c0b0f0;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .description-box p {
+      font-size: 14px;
+      line-height: 1.75;
+      color: #b0b0d0;
+    }
+    .description-box p + p { margin-top: 12px; }
+    .wiki-sections {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .wiki-section-full { margin-bottom: 20px; }
+    .section-card {
+      background: #12142e;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .section-card:hover { border-color: rgba(106,90,205,0.3); }
+    .section-header {
+      background: linear-gradient(135deg, #1e1a45, #2a2060);
+      padding: 14px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #c0c0f0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-header .icon {
+      width: 20px; height: 20px;
+      border-radius: 6px;
+      background: rgba(106,90,205,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+    }
+    .section-body { padding: 20px; }
+    .section-body p {
+      font-size: 13px;
+      line-height: 1.7;
+      color: #a0a0c0;
+    }
+    .section-body h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d0c8f0;
+      margin-bottom: 8px;
+    }
+    .trace-list { list-style: none; }
+    .trace-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px;
+      color: #a0a0c0;
+      display: flex;
+      justify-content: space-between;
+    }
+    .trace-list li:last-child { border-bottom: none; }
+    .trace-val { color: #d0c8f0; font-weight: 500; }
+    .stat-section-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8888aa;
+      margin-bottom: 8px;
+      margin-top: 16px;
+    }
+    .stat-section-label:first-child { margin-top: 0; }
+    .stat-toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .stat-toggle-btn {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      border-radius: 11px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: #1a1d45;
+      cursor: pointer;
+      transition: background 0.25s, border-color 0.25s;
+      flex-shrink: 0;
+    }
+    .stat-toggle-btn.active {
+      background: linear-gradient(135deg, #3b2f7a, #5a3fa0);
+      border-color: #6a5acd;
+    }
+    .stat-toggle-btn::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #a0a0c0;
+      transition: transform 0.25s, background 0.25s;
+    }
+    .stat-toggle-btn.active::after {
+      transform: translateX(18px);
+      background: #fff;
+    }
+    .stat-toggle-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #a0a0c0;
+      transition: color 0.25s;
+      user-select: none;
+    }
+    .stat-toggle-label.active-label { color: #d0c8f0; }
+    .stat-panel { position: relative; }
+    .stat-table { transition: opacity 0.3s ease; }
+    .stat-table.hidden { display: none; }
+    .stat-table.fading-out { opacity: 0; }
+    .stat-table.fading-in { opacity: 0; }
+    .rec-entry { margin-bottom: 16px; }
+    .rec-entry:last-child { margin-bottom: 0; }
+    .rec-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d0c8f0;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .rec-tag {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: rgba(106,90,205,0.2);
+      color: #a090d0;
+    }
+    .rec-tag.bis {
+      background: rgba(240,192,64,0.15);
+      color: #f0c040;
+    }
+    .rec-desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #9090b0;
+    }
+    .mainstat-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .mainstat-list li {
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px;
+      color: #a0a0c0;
+    }
+    .mainstat-list li:last-child { border-bottom: none; }
+    .mainstat-slot {
+      font-weight: 600;
+      color: #8888aa;
+    }
+    .mainstat-val {
+      color: #d0c8f0;
+      font-weight: 500;
+    }
+    .priority-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .priority-item:last-child { border-bottom: none; }
+    .priority-rank {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .priority-rank.rank-1 { background: rgba(240,192,64,0.2); color: #f0c040; }
+    .priority-rank.rank-2 { background: rgba(192,192,210,0.15); color: #c0c0d2; }
+    .priority-rank.rank-3 { background: rgba(180,130,80,0.15); color: #b4824f; }
+    .priority-rank.rank-4 { background: rgba(140,140,170,0.1); color: #8c8caa; }
+    .priority-info { flex: 1; }
+    .priority-type {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #7a6ae0;
+      margin-bottom: 2px;
+    }
+    .priority-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d0c8f0;
+    }
+    .priority-note {
+      font-size: 12px;
+      color: #8888aa;
+      margin-top: 2px;
+    }
+    .team-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .team-row:last-child { margin-bottom: 0; }
+    .team-block {
+      flex: 1;
+      min-width: 280px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .team-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8888aa;
+      margin-bottom: 12px;
+    }
+    .team-slots { display: flex; gap: 12px; }
+    .team-slot { flex: 1; text-align: center; }
+    .team-slot-icon {
+      width: 56px; height: 56px;
+      border-radius: 12px;
+      margin: 0 auto 6px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(255,255,255,0.08);
+      overflow: hidden;
+      background: #1a1d45;
+      position: relative;
+    }
+    .team-slot-icon img { width: 100%; height: 100%; object-fit: cover; }
+    .team-slot-icon img.alt-icon {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+    .team-slot-icon img.alt-icon:first-child {
+      animation: flashA 2s infinite;
+    }
+    .team-slot-icon img.alt-icon:nth-child(2) {
+      animation: flashB 2s infinite;
+    }
+    @keyframes flashA {
+      0%, 45%   { opacity: 1; }
+      50%, 95%  { opacity: 0; }
+      100%      { opacity: 1; }
+    }
+    @keyframes flashB {
+      0%, 45%   { opacity: 0; }
+      50%, 95%  { opacity: 1; }
+      100%      { opacity: 0; }
+    }
+    .team-slot-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: #d0c8f0;
+    }
+    .team-slot-role {
+      font-size: 10px;
+      color: #7a7ca0;
+      margin-top: 1px;
+    }
+    .team-note {
+      font-size: 12px;
+      color: #8888aa;
+      margin-top: 12px;
+      line-height: 1.5;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    .invest-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .invest-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .invest-card-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #8888aa;
+      margin-bottom: 8px;
+    }
+    .invest-card-value {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .invest-card-note {
+      font-size: 11px;
+      color: #7a7ca0;
+    }
+    .grade-s { color: #f0c040; }
+    .grade-a { color: #60d080; }
+    .grade-b { color: #60a0e0; }
+    .invest-summary {
+      padding: 16px;
+      background: rgba(106,90,205,0.06);
+      border: 1px solid rgba(106,90,205,0.12);
+      border-radius: 10px;
+    }
+    .invest-summary h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #c0b0f0;
+      margin-bottom: 8px;
+    }
+    .invest-summary p {
+      font-size: 13px;
+      line-height: 1.7;
+      color: #a0a0c0;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #2a2d5a; border-radius: 3px; }
+    @media (max-width: 1000px) {
+      .wiki-top { grid-template-columns: 1fr; }
+      .char-portrait { width: 220px; }
+      .wiki-sections { grid-template-columns: 1fr; }
+      .invest-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .main { padding: 16px; }
+      .char-portrait { width: 180px; }
+      .invest-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main">
+    <a href="https://akaerya.github.io/" class="back-btn">← Back to Characters</a>
+
+    <div class="wiki-top">
+      <div class="left-col">
+        <div class="char-portrait">
+          <img src="/images/character/hyacine.webp" alt="Hyacine">
+        </div>
+        <div class="info-box">
+          <div class="info-box-header">Character Info</div>
+          <div class="info-row">
+            <span class="info-label">Rarity</span>
+            <span class="info-value stars">★★★★★</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Path</span>
+            <span class="info-value">
+              <img src="/images/remembrance.webp" alt="Remembrance"> Remembrance
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Element</span>
+            <span class="info-value">
+              <img src="/images/wind.webp" alt="Wind"> Wind
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Faction</span>
+            <span class="info-value">Chrysos Heirs</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">World</span>
+            <span class="info-value">Amphoreus</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-col">
+        <div class="char-name-block">
+          <h1>Hyacine</h1>
+          <div class="subtitle">"As the descendant of Sky, I, Hyacinthia, will fulfill the Flame-Chase duty with all of you. At the same time, I'll do my best to help everyone as Hyacine, healer of the Twilight Courtyard. This is my good friend and assistant, the little pegasus Ica. Do you want to pet them? Please, go ahead! They love being petted~"</div>
+        </div>
+        <div class="char-stars-lg">★★★★★</div>
+        <div class="description-box" style="margin-bottom: 16px;">
+          <h3>Character Summary</h3>
+          
+        </div>
+        <div class="description-box">
+          <h3>Build Notes</h3>
+          <p>CD: For full Remembrance teams (Castorice or Evernight teams), you can aim for less CD and more SPD/HP, since Evernight provides a lot of CD for Hyacine as is.</p>
+          <p>SPD: 200 SPD is required to give Hyacine a 20% max HP increase. You need 18 SPD without her signature to get to 200 SPD, while you need 12 SPD with her signature. Subtract 6 SPD from recommended stats if you are using Warrior Goddess 4pc.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="wiki-sections">
+
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">✦</span> Recommended Stats (out of combat)
+        </div>
+        <div class="section-body">
+          <div class="stat-toggle-wrap">
+            <div class="stat-toggle-btn" id="statToggle" onclick="toggleStats()"></div>
+            <span class="stat-toggle-label active-label" id="statToggleLabel">E0S0</span>
+          </div>
+
+          <div class="stat-panel" id="statPanel">
+            <div class="stat-table" id="statsE0S0">
+              <div class="stat-section-label"><b>E0S0 (Memory's Curtain Never Falls)</b></div>
+              <ul class="trace-list">
+                <li><span>HP</span> <span class="trace-val">4900+</span></li>
+                <li><span>SPD</span> <span class="trace-val">200+</span></li>
+              </ul>
+            </div>
+
+            <div class="stat-table hidden" id="statsE0S1">
+              <div class="stat-section-label"><b>5* E0S1 (Long May Rainbows Adorn the Sky)</b></div>
+              <ul class="trace-list">
+                <li><span>HP</span> <span class="trace-val">5200+</span></li>
+                <li><span>CRIT DMG</span> <span class="trace-val">80%+</span></li>
+                <li><span>SPD</span> <span class="trace-val">200+</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="stat-section-label"><b>Mainstat Priority</b></div>
+          <ul class="mainstat-list" id="mainstatList">
+                <li><span class="mainstat-slot">Body:</span> <span class="mainstat-val">OHB > HP</span></li>
+                <li><span class="mainstat-slot">Boots:</span> <span class="mainstat-val">SPD</span></li>
+                <li><span class="mainstat-slot">Sphere:</span> <span class="mainstat-val">HP</span></li>
+                <li><span class="mainstat-slot">Rope:</span> <span class="mainstat-val">ERR</span></li>
+          </ul>
+          <div class="stat-section-label" style="margin-top:12px;"><b>Substat Priority</b></div>
+          <div class="rec-desc">SPD > HP = CD > ERES</div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">◈</span> Recommended Light Cones / Relic Sets
+        </div>
+        <div class="section-body">
+          <h4>Light Cones</h4>
+          <div class="rec-entry">
+            <div class="rec-name">Long May Rainbows Adorn the Sky S1 <span class="rec-tag bis">BiS</span></div>
+            <div class="rec-desc">Hyacine's signature LC and her best LC in terms of raw stats and overall utility. Provides 18% SPD for Hyacine, 18% vulnerability on memosprite skill, and burns all allies' HP on Basic/Skill/Ultimate use to trigger one instance of Hyacine's healing on all allies. The HP burn + healing also provides more personal damage for Hyacine and other potential mechanical changes for units like Castorice or Evernight.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Memory's Curtain Never Falls S5 <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Most comfortable F2P option as it provides 12% SPD (which Hyacine really wants) and 16% DMG for the entire team on Skill use (which Hyacine should be using fairly often).</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">The Story's Next Page S5 <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Great F2P option but requires more SPD on Hyacine to reach the 200 SPD requirement for Hyacine overall. Provides 32% max HP and 24% OHB, which can make this LC better than Memory's Curtain in terms of healing and Hyacine's personal damage with good enough relics.</div>
+          </div>
+
+          <h4 style="margin-top:20px;">Relic Sets</h4>
+          <div class="rec-entry">
+            <div class="rec-name">Warrior Goddess of Sky and Thunder <span class="rec-tag bis">BiS</span></div>
+            <div class="rec-desc">Hyacine's dedicated set and her most comfortable option overall. Provides a total of 12% SPD (though it only shows 6% out of combat) and 15% CD to all allies, both stats that Hyacine wants while also providing good offensive utility for the entire team.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">World-Remaking Deliverer <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Minmaxing set for Hyacine. While this set does not provide any SPD, the 4pc increases Hyacine's max HP by 24% (great for healing) and provides 15% DMG to all allies, which is usually more valuable than Warrior Goddess' CD increase.</div>
+          </div>
+
+          <h4 style="margin-top:20px;">Planar Ornaments</h4>
+          <div class="rec-entry">
+            <div class="rec-name">Giant Tree of Rapt Brooding <span class="rec-tag bis">BiS</span></div>
+            <div class="rec-desc">Hyacine's most comfortable planar to use as it provides SPD and OHB, which help with Hyacine's healing and personal damage. However, this planar does not provide any offensive buffs for the team.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Broken Keel <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Decent planar for Hyacine, as it provides 10% CD to the team, and Hyacine gains 50% Effect RES through her major traces which easily fulfills Broken Keel's Effect RES requirement.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Lushaka, the Sunken Seas <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Generically good planar for hypercarry DPS teams. Provides 12% ATK to one ally, and the ERR from this planar can also be useful for Hyacine as she can potentially save 1 SP per Ultimate rotation to get her Ultimate up with full uptime.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">⚙</span> Trace Priority
+        </div>
+        <div class="section-body">
+          <h4>Character Traces</h4>
+          <div class="priority-item">
+            <div class="priority-rank rank-1">1</div>
+            <div class="priority-info">
+              <div class="priority-type">Ultimate</div>
+              <div class="priority-name" data-trace-type="Ultimate">We Who Fly Into Twilight</div>
+              <div class="priority-note">Affects how much of a max HP increase Hyacine provides to the team, which is very important for her sustain ability and for buffing HP-scaling DPSes. High priority.</div>
+            </div>
+          </div>
+          <div class="priority-item">
+            <div class="priority-rank rank-1">1</div>
+            <div class="priority-info">
+              <div class="priority-type">Talent</div>
+              <div class="priority-name" data-trace-type="Talent">First Light Heals the World</div>
+              <div class="priority-note">Affects Hyacine's personal damage, high priority.</div>
+            </div>
+          </div>
+          <div class="priority-item">
+            <div class="priority-rank rank-3">3</div>
+            <div class="priority-info">
+              <div class="priority-type">Skill</div>
+              <div class="priority-name" data-trace-type="Skill">Love Over the Rainbow</div>
+              <div class="priority-note">Affects Hyacine's active healing. High priority for most teams (especially SP-light teams or HP scaling teams), though if you're using Hyacine in a less SP-heavy way (not recommended but can be used as such), this trace can be of lower priority.</div>
+            </div>
+          </div>
+          <div class="priority-item">
+            <div class="priority-rank rank-4">4</div>
+            <div class="priority-info">
+              <div class="priority-type">Basic ATK</div>
+              <div class="priority-name" data-trace-type="Basic ATK">When Breeze Kisses Cirrus</div>
+              <div class="priority-note">Does a small amount of damage and no further support for the team. Low priority.</div>
+            </div>
+          </div>
+
+          <h4 style="margin-top:20px;">Memosprite Traces</h4>
+          <div class="priority-item">
+            <div class="priority-rank rank-1">1</div>
+            <div class="priority-info">
+              <div class="priority-type">Memosprite Skill</div>
+              <div class="priority-name" data-trace-type="Memosprite Skill">Rainclouds, Time to Go!</div>
+              <div class="priority-note">Affects how much personal damage Hyacine/Ica provides. High priority.</div>
+            </div>
+          </div>
+          <div class="priority-item">
+            <div class="priority-rank rank-1">1</div>
+            <div class="priority-info">
+              <div class="priority-type">Memosprite Talent</div>
+              <div class="priority-name" data-trace-type="Memosprite Talent">Take Sky in Hand</div>
+              <div class="priority-note">Affects Hyacine's passive healing whenever allies lose HP, which is a notable portion of her healing. High priority.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wiki-section-full">
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">👥</span> Team Suggestions
+        </div>
+        <div class="section-body">
+          <div class="team-row">
+            <div class="team-block">
+              <div class="team-label">Mono Remembrance (Castorice)</div>
+              <div class="team-slots">
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Castorice_Icon.webp" alt="Castorice"></div>
+                  <div class="team-slot-name">Castorice</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Evernight_Icon.webp" alt="Evernight"></div>
+                  <div class="team-slot-name">Evernight</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Cyrene_Icon.webp" alt="Cyrene"></div>
+                  <div class="team-slot-name">Cyrene</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Hyacine_Icon.webp" alt="Hyacine"></div>
+                  <div class="team-slot-name">Hyacine</div>
+                  <div class="team-slot-role">Sustain</div>
+                </div>
+              </div>
+              <div class="team-note">Hyacine's most synergistic team as all members in this team are HP scaling, Castorice is heavily dependent on large amounts of healing or HP drain to summon Pollux which Hyacine provides (Ica also counts as another ally to drain HP from through Castorice's abilities) and Evernight relies on HP drain to accumulate Memoria stacks, which is her main source of damage. Cyrene also gains a Recollecion stack every time Ica takes action, which makes it extremely easy to get Cyrene's Ultimate ready compared to other teams. This team outside of Hyacine is also SP neutral which allows Hyacine to use her Skill more frequently to generate healing for the whole team.</div>
+            </div>
+            <div class="team-block">
+              <div class="team-label">Mono Remembrance (Evernight)</div>
+              <div class="team-slots">
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Evernight_Icon.webp" alt="Evernight"></div>
+                  <div class="team-slot-name">Evernight</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Cyrene_Icon.webp" alt="Cyrene"></div>
+                  <div class="team-slot-name">Cyrene</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_RMC_Icon.webp" alt="RMC"></div>
+                  <div class="team-slot-name">RMC</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Hyacine_Icon.webp" alt="Hyacine"></div>
+                  <div class="team-slot-name">Hyacine</div>
+                  <div class="team-slot-role">Sustain</div>
+                </div>
+              </div>
+              <div class="team-note">Similar to the Castorice variant of the mono-Remembrance team, Hyacine synergises very well with Evernight and Cyrene as both of them are HP scaling units who deal notable damage, Evernight gains Memoria stacks more quickly with Hyacine, and Cyrene gains Recollection stacks more quickly with a healer with a memosprite. Hyacine's healing is also higher in this team compared to other teams due to Hyacine healing 8 allies instead of 4, which leads to higher personal damage. Evernight and RMC also provide CD buffs to Hyacine, which further increases her personal damage. This team outside of Hyacine is also SP positive which allows Hyacine to use her Skill more frequently to generate healing for the whole team.</div>
+            </div>
+          </div>
+          <div class="team-row">
+            <div class="team-block">
+              <div class="team-label">Ashveil Dual Carry</div>
+              <div class="team-slots">
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Ashveil_Icon.webp" alt="Ashveil"></div>
+                  <div class="team-slot-name">Ashveil</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Mortenax_Blade_Icon.webp" alt="Mortenax Blade"></div>
+                  <div class="team-slot-name">Mortenax Blade</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Tribbie_Icon.webp" alt="Tribbie"></div>
+                  <div class="team-slot-name">Tribbie</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Hyacine_Icon.webp" alt="Hyacine"></div>
+                  <div class="team-slot-name">Hyacine</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+              </div>
+              <div class="team-note">Hyacine synergises quite well with this team as Ashveil and MBlade are DPSes that do not consume SP and Tribbie generates a little bit of SP, which allows Hyacine to use her Skill quite often to ensure full uptime on her Ultimate while also dealing good personal damage (though she can use her Basics as well to provide higher attack frequency for the team). Mortenax Blade also gets a small damage amp from Hyacine as MBlade gains max HP from Hyacine's Ultimate.</div>
+            </div>
+            <div class="team-block">
+              <div class="team-label">MBlade Hypercarry</div>
+              <div class="team-slots">
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Mortenax_Blade_Icon.webp" alt="Mortenax Blade"></div>
+                  <div class="team-slot-name">Mortenax Blade</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Sunday_Icon.webp" alt="Sunday"></div>
+                  <div class="team-slot-name">Sunday</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Tribbie_Icon.webp" alt="Tribbie"></div>
+                  <div class="team-slot-name">Tribbie</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Hyacine_Icon.webp" alt="Hyacine"></div>
+                  <div class="team-slot-name">Hyacine</div>
+                  <div class="team-slot-role">Sustain</div>
+                </div>
+              </div>
+              <div class="team-note">A team that focuses more on Mortenax Blade's personal damage, Hyacine is his best sustain due to her being able to provide a max HP increase for him and Tribbie. The team is primarily SP positive as well, which allows Hyacine to keep her Ultimate up with full uptime, though you can use a Basic here and there to provide attack frequency for MBlade's FUA as well.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="wiki-section-full">
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">📊</span> Vertical Investment Analysis
+        </div>
+        <div class="section-body">
+          <div class="invest-grid">
+            <div class="invest-card">
+              <div class="invest-card-label">Sig LC (S1)</div>
+              <div class="invest-card-value grade-s">★★★★</div>
+              <div class="invest-card-note">The vulnerability provides a 10-15% team damage increase for most teams, but the LC provides a lot of QoL for Hyacine as it makes her much easier to build and it frees up Memory's Curtain LC for Cyrene if you are using her. More importantly, this LC greatly improves her healing, which makes this a very significant (35% team damage) improvement for Castorice teams specifically. The HP burn effect is also useful for Blade and Jingliu teams as they rely on HP burn to get their rotations going.</div>
+            </div>
+            <div class="invest-card">
+              <div class="invest-card-label">Teammates</div>
+              <div class="invest-card-value grade-s">★★★★</div>
+              <div class="invest-card-note">For mono Remembrance teams, you are better off investing in other teammates past Hyacine E1S1. For ATK scaling teams, you are better off investing into your DPS or supports past E0S1 Hyacine.</div>
+            </div>
+            <div class="invest-card">
+              <div class="invest-card-label">E1</div>
+              <div class="invest-card-value grade-s">★★★★</div>
+              <div class="invest-card-note">20-30% team damage increase for purely HP scaling teams and a higher increase for Castorice teams, but otherwise an okay eidolon which improves Hyacine's personal damage for ATK scaling teams.</div>
+            </div>
+            <div class="invest-card">
+              <div class="invest-card-label">E2</div>
+              <div class="invest-card-value grade-s">★★★★</div>
+              <div class="invest-card-note">Provides 30% SPD for all allies, which is excellent for many teams like DoT or SW999 teams.</div>
+            </div>
+          </div>
+
+          <div class="invest-summary">
+            <h4>Investment Recommendation</h4>
+            <p>Hyacine E0S0 is already a complete unit, but E0S1 provides a lot of QoL (in terms of building Hyacine and for sustain) and a small damage amp for all teams. E1 is a nice damage increase for HP scaling teams, and E2 is excellent for teams that benefit from SPD, but I would personally not go for E2 just for the SPD boost alone unless you really want to improve your SW999 team or you really like her.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let showingE0S1 = false;
+    function toggleStats() {
+      const toggle = document.getElementById('statToggle');
+      const label = document.getElementById('statToggleLabel');
+      const current = showingE0S1 ? document.getElementById('statsE0S1') : document.getElementById('statsE0S0');
+      const next = showingE0S1 ? document.getElementById('statsE0S0') : document.getElementById('statsE0S1');
+      showingE0S1 = !showingE0S1;
+      toggle.classList.toggle('active', showingE0S1);
+      label.textContent = showingE0S1 ? '5* E0S1 / 4* E6S5' : 'E0S0';
+      current.classList.add('fading-out');
+      setTimeout(() => {
+        current.classList.add('hidden');
+        current.classList.remove('fading-out');
+        next.classList.remove('hidden');
+        next.classList.add('fading-in');
+        void next.offsetWidth;
+        next.classList.remove('fading-in');
+      }, 300);
+    }
+  </script>
+</body>
+</html>
