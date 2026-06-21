@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Dahlia - Character Details</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0b0d1a;
+      color: #e0e0f0;
+      display: flex;
+      min-height: 100vh;
+    }
+    .main {
+      margin-left: 0px;
+      flex: 1;
+      padding: 32px 36px;
+      max-width: 1400px;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: #14163a;
+      color: #a0a0c0;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 28px;
+      text-decoration: none;
+    }
+    .back-btn:hover { border-color: #6a5acd; color: #e0e0f0; }
+    .wiki-top {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+    .left-col { display: flex; flex-direction: column; gap: 20px; }
+    .char-portrait {
+      width: 280px;
+      aspect-ratio: 1 / 1.15;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(160deg, #2a1a4a 0%, #1a1040 50%, #301a50 100%);
+    }
+    .char-portrait img { width: 100%; height: 100%; object-fit: cover; }
+    .info-box {
+      background: #12142e;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .info-box-header {
+      background: linear-gradient(135deg, #1e1a45, #2a2060);
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #c0c0f0;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-label { color: #8888aa; font-weight: 500; }
+    .info-value {
+      color: #d0d0f0;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .info-value img { width: 20px; height: 20px; border-radius: 4px; }
+    .stars { color: #f0c040; letter-spacing: 1px; }
+    .right-col { display: flex; flex-direction: column; }
+    .char-name-block { margin-bottom: 8px; }
+    .char-name-block h1 {
+      font-size: 36px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .char-name-block .subtitle {
+      font-size: 14px;
+      color: #8888aa;
+      font-style: italic;
+    }
+    .char-stars-lg {
+      font-size: 20px;
+      color: #f0c040;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+    .description-box {
+      background: #12142e;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 24px;
+      flex: 1;
+    }
+    .description-box h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #c0b0f0;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .description-box p {
+      font-size: 14px;
+      line-height: 1.75;
+      color: #b0b0d0;
+    }
+    .description-box p + p { margin-top: 12px; }
+    .wiki-sections {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .wiki-section-full { margin-bottom: 20px; }
+    .section-card {
+      background: #12142e;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .section-card:hover { border-color: rgba(106,90,205,0.3); }
+    .section-header {
+      background: linear-gradient(135deg, #1e1a45, #2a2060);
+      padding: 14px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #c0c0f0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-header .icon {
+      width: 20px; height: 20px;
+      border-radius: 6px;
+      background: rgba(106,90,205,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+    }
+    .section-body { padding: 20px; }
+    .section-body p {
+      font-size: 13px;
+      line-height: 1.7;
+      color: #a0a0c0;
+    }
+    .section-body h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d0c8f0;
+      margin-bottom: 8px;
+    }
+    .trace-list { list-style: none; }
+    .trace-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px;
+      color: #a0a0c0;
+      display: flex;
+      justify-content: space-between;
+    }
+    .trace-list li:last-child { border-bottom: none; }
+    .trace-val { color: #d0c8f0; font-weight: 500; }
+    .stat-section-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8888aa;
+      margin-bottom: 8px;
+      margin-top: 16px;
+    }
+    .stat-section-label:first-child { margin-top: 0; }
+    .stat-toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .stat-toggle-btn {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      border-radius: 11px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: #1a1d45;
+      cursor: pointer;
+      transition: background 0.25s, border-color 0.25s;
+      flex-shrink: 0;
+    }
+    .stat-toggle-btn.active {
+      background: linear-gradient(135deg, #3b2f7a, #5a3fa0);
+      border-color: #6a5acd;
+    }
+    .stat-toggle-btn::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #a0a0c0;
+      transition: transform 0.25s, background 0.25s;
+    }
+    .stat-toggle-btn.active::after {
+      transform: translateX(18px);
+      background: #fff;
+    }
+    .stat-toggle-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #a0a0c0;
+      transition: color 0.25s;
+      user-select: none;
+    }
+    .stat-toggle-label.active-label { color: #d0c8f0; }
+    .stat-panel { position: relative; }
+    .stat-table { transition: opacity 0.3s ease; }
+    .stat-table.hidden { display: none; }
+    .stat-table.fading-out { opacity: 0; }
+    .stat-table.fading-in { opacity: 0; }
+    .rec-entry { margin-bottom: 16px; }
+    .rec-entry:last-child { margin-bottom: 0; }
+    .rec-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d0c8f0;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .rec-tag {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: rgba(106,90,205,0.2);
+      color: #a090d0;
+    }
+    .rec-tag.bis {
+      background: rgba(240,192,64,0.15);
+      color: #f0c040;
+    }
+    .rec-desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #9090b0;
+    }
+    .mainstat-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .mainstat-list li {
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px;
+      color: #a0a0c0;
+    }
+    .mainstat-list li:last-child { border-bottom: none; }
+    .mainstat-slot {
+      font-weight: 600;
+      color: #8888aa;
+    }
+    .mainstat-val {
+      color: #d0c8f0;
+      font-weight: 500;
+    }
+    .priority-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .priority-item:last-child { border-bottom: none; }
+    .priority-rank {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .priority-rank.rank-1 { background: rgba(240,192,64,0.2); color: #f0c040; }
+    .priority-rank.rank-2 { background: rgba(192,192,210,0.15); color: #c0c0d2; }
+    .priority-rank.rank-3 { background: rgba(180,130,80,0.15); color: #b4824f; }
+    .priority-rank.rank-4 { background: rgba(140,140,170,0.1); color: #8c8caa; }
+    .priority-info { flex: 1; }
+    .priority-type {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #7a6ae0;
+      margin-bottom: 2px;
+    }
+    .priority-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d0c8f0;
+    }
+    .priority-note {
+      font-size: 12px;
+      color: #8888aa;
+      margin-top: 2px;
+    }
+    .team-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .team-row:last-child { margin-bottom: 0; }
+    .team-block {
+      flex: 1;
+      min-width: 280px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .team-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8888aa;
+      margin-bottom: 12px;
+    }
+    .team-slots { display: flex; gap: 12px; }
+    .team-slot { flex: 1; text-align: center; }
+    .team-slot-icon {
+      width: 56px; height: 56px;
+      border-radius: 12px;
+      margin: 0 auto 6px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(255,255,255,0.08);
+      overflow: hidden;
+      background: #1a1d45;
+      position: relative;
+    }
+    .team-slot-icon img { width: 100%; height: 100%; object-fit: cover; }
+    .team-slot-icon img.alt-icon {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+    .team-slot-icon img.alt-icon:first-child {
+      animation: flashA 2s infinite;
+    }
+    .team-slot-icon img.alt-icon:nth-child(2) {
+      animation: flashB 2s infinite;
+    }
+    @keyframes flashA {
+      0%, 45%   { opacity: 1; }
+      50%, 95%  { opacity: 0; }
+      100%      { opacity: 1; }
+    }
+    @keyframes flashB {
+      0%, 45%   { opacity: 0; }
+      50%, 95%  { opacity: 1; }
+      100%      { opacity: 0; }
+    }
+    .team-slot-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: #d0c8f0;
+    }
+    .team-slot-role {
+      font-size: 10px;
+      color: #7a7ca0;
+      margin-top: 1px;
+    }
+    .team-note {
+      font-size: 12px;
+      color: #8888aa;
+      margin-top: 12px;
+      line-height: 1.5;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    .invest-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .invest-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .invest-card-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #8888aa;
+      margin-bottom: 8px;
+    }
+    .invest-card-value {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .invest-card-note {
+      font-size: 11px;
+      color: #7a7ca0;
+    }
+    .grade-s { color: #f0c040; }
+    .grade-a { color: #60d080; }
+    .grade-b { color: #60a0e0; }
+    .invest-summary {
+      padding: 16px;
+      background: rgba(106,90,205,0.06);
+      border: 1px solid rgba(106,90,205,0.12);
+      border-radius: 10px;
+    }
+    .invest-summary h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #c0b0f0;
+      margin-bottom: 8px;
+    }
+    .invest-summary p {
+      font-size: 13px;
+      line-height: 1.7;
+      color: #a0a0c0;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #2a2d5a; border-radius: 3px; }
+    @media (max-width: 1000px) {
+      .wiki-top { grid-template-columns: 1fr; }
+      .char-portrait { width: 220px; }
+      .wiki-sections { grid-template-columns: 1fr; }
+      .invest-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .main { padding: 16px; }
+      .char-portrait { width: 180px; }
+      .invest-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main">
+    <a href="https://akaerya.github.io/" class="back-btn">← Back to Characters</a>
+
+    <div class="wiki-top">
+      <div class="left-col">
+        <div class="char-portrait">
+          <img src="/images/character/thedahlia.webp" alt="The Dahlia">
+        </div>
+        <div class="info-box">
+          <div class="info-box-header">Character Info</div>
+          <div class="info-row">
+            <span class="info-label">Rarity</span>
+            <span class="info-value stars">★★★★★</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Path</span>
+            <span class="info-value">
+              <img src="/images/nihility.webp" alt="Nihility"> Nihility
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Element</span>
+            <span class="info-value">
+              <img src="/images/fire.webp" alt="Fire"> Fire
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Faction</span>
+            <span class="info-value">The Cremators</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">World</span>
+            <span class="info-value">Cosmic</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-col">
+        <div class="char-name-block">
+          <h1>The Dahlia</h1>
+          <div class="subtitle">"My name is Constance, and those who have fallen to my charms call me 'The Dahlia.' Don't be afraid. Come with me. In this duet belonging only to the two of us, you will learn how the past is being cremated and how the future is being buried..."</div>
+        </div>
+        <div class="char-stars-lg">★★★★★</div>
+        <div class="description-box" style="margin-bottom: 16px;">
+          <h3>Character Summary</h3>
+          <p>The Dahlia is a Break-oriented support that provides an ally (called the "Dance Partner") with Weakness Break Efficiency and the ability to inflict Super Break DMG without reducing all of the toughness of an enemy. Dahlia also provides herself with a SPD boost, DEF shred, a decent amount of toughness damage and a weakness implant of her Dance Partner's element and her own on every use of her Ultimate. Additionally, The Dahlia provides a small BE% boost to her Dance Partner assuming that they have attained some healing or shielding, but this does not come up often since most break teams are currently being run sustainless.</p>
+          <p>For Dance Partners who are able to implant their weakness types (namely Boothill and Firefly), Dahlia also provides a substantial SPD boost to them, and for Firefly and herself (units who can implant Fire weakness) in particular, they gain energy based on the number of instances they have implanted a Fire weakness onto enemies, up to 50% of their max energy.</p>
+          <p>Due to Dahlia's ability to allow an ally to inflict Super Break DMG without breaking enemies, The Dahlia is considered an essential support for all Break DPSes since she provides a significantly larger window for these DPSes to deal damage rather than relying on an enemy who is Weakness Broken to deal damage. For Firefly in particular, Dahlia also reduces the amount of downtime Firefly has outside of her enhanced state to 1 turn, which allows Firefly to go back immediately into her enhanced state after one Skill use, which greatly enhances her overall damage output.</p>
+        </div>
+        <div class="description-box">
+          <h3>Build Notes</h3>
+          <p>BE: Subtract 30% BE from the BE stat recommendation if you are using 4pc Kalpagni. </p>
+          <p>SPD: 156.2+ SPD with 1 DDD proc ensures 3 actions in cycle 0 of wave 2. Otherwise, there are no meaningful breakpoints for Dahlia, just aim for a proper balance between SPD and BE.</p>
+          <p>Rope: For personal damage, wear a BE rope + Cavalry. For better SP gen or more ultimates and general utility overall, use ERR rope + Eagle. Eagle is the easiest way for her to ensure 3 actions in cycle 0 (effective 200 SPD), but this might not be necessary for most players. Without Tutorial LC, ERR or BE rope is dependent on number of enemy targets; Dahlia can be played with a SBB rotation while still maintaining a 2t ult rotation with ERR rope + 2 enemies.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="wiki-sections">
+
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">✦</span> Recommended Stats (out of combat)
+        </div>
+        <div class="section-body">
+          <div class="stat-toggle-wrap">
+            <div class="stat-toggle-btn" id="statToggle" onclick="toggleStats()"></div>
+            <span class="stat-toggle-label active-label" id="statToggleLabel">E0S0</span>
+          </div>
+
+          <div class="stat-panel" id="statPanel">
+            <div class="stat-table" id="statsE0S0">
+              <div class="stat-section-label"><b>E0S0 (Before the Tutorial Mission Starts)</b></div>
+              <ul class="trace-list">
+                <li><span>BE</span> <span class="trace-val">150%+ (ERR) / 220%+ (BE)</span></li>
+                <li><span>SPD</span> <span class="trace-val">143.86+ / 156.2+ / 160+</span></li>
+              </ul>
+            </div>
+
+            <div class="stat-table hidden" id="statsE0S1">
+              <div class="stat-section-label"><b>5* E0S1 (Never Forget Her Flame)</b></div>
+              <ul class="trace-list">
+                <li><span>BE</span> <span class="trace-val">190%+ (ERR) / 260%+ (BE)</span></li>
+                <li><span>SPD</span> <span class="trace-val">160+</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="stat-section-label"><b>Mainstat Priority</b></div>
+          <ul class="mainstat-list" id="mainstatList">
+                <li><span class="mainstat-slot">Body:</span> <span class="mainstat-val">HP or DEF</span></li>
+                <li><span class="mainstat-slot">Boots:</span> <span class="mainstat-val">SPD</span></li>
+                <li><span class="mainstat-slot">Sphere:</span> <span class="mainstat-val">HP or DEF</span></li>
+                <li><span class="mainstat-slot">Rope:</span> <span class="mainstat-val">BE or ERR</span></li>
+          </ul>
+          <div class="stat-section-label" style="margin-top:12px;"><b>Substat Priority</b></div>
+          <div class="rec-desc">SPD > BE</div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">◈</span> Recommended Light Cones / Relic Sets
+        </div>
+        <div class="section-body">
+          <h4>Light Cones</h4>
+          <div class="rec-entry">
+            <div class="rec-name">Never Forget Her Flame S1 <span class="rec-tag bis">BiS</span></div>
+            <div class="rec-desc">Dahlia's signature LC and her general BiS LC. Provides 60% personal BE, 32% Break DMG (an extremely rare multiplier) to both herself and her Dance Partner, and 1 SP on every Ultimate use (which is great for SP heavy break DPSes like Firefly). About a 30% increase over Tutorial, though the difference is slightly smaller (20-24%) if you are using Pearls LC instead.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Lies Dance on the Breeze S1 <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Cipher's signature LC and one of her stronger options; provides 18% SPD and 24% DEF shred if she exceeds 170 SPD, which is trivial due to Dahlia's self-SPD boost. Pairs well with other DEF shred sources like Fugue, Pearls LC (on Fugue), and Iron Cavalry 4pc. Can have comparable performance to Dahlia's LC if you are not overcapping on DEF shred, but generally about 25-26% better than Tutorial LC.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Resolution Shines as Pearls of Sweat S5 <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Best damage amping 4* LC, provides 16% DEF shred to all allies. Dahlia does not need to build much EHR on this LC as this LC's debuff lands per hit rather than per attack, and Dahlia lands a lot of hits in particular. A 10-12% damage improvement over Tutorial LC on paper, but do note that if Fugue is wearing this, Dahlia cannot wear this LC to apply the debuff a second time.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Before the Tutorial Mission Starts S5 <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Good F2P option for utility, Dahlia can get 2-turn Ultimates with a Skill-Basic rotation with this light cone even with a BE rope, which is useful for reducing toughness damage or activating Eagle as frequently as possible overall.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Solitary Healing S5 <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Good F2P option for personal damage, provides Dahlia with 40% BE.</div>
+          </div>
+
+          <h4 style="margin-top:20px;">Relic Sets</h4>
+          <div class="rec-entry">
+            <div class="rec-name">Iron Cavalry Against the Scourge <span class="rec-tag bis">BiS</span></div>
+            <div class="rec-desc">Dahlia's best relic set for personal super break damage and maximising her BE buff for her Dance Partner (assuming that you use a sustain), providing her with 16 BE% and DEF shred for her Super Break damage.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Eagle of Twilight Line <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Best set for maximising the number of Dahlia actions in a fight, which might be useful for reducing toughness damage specifically. Dahlia can get her Ultimate every 2 turns with ERR rope or Tutorial LC, which gives her an effective 14.3% SPD increase. It is worth noting that Dahlia usually uses an ERR rope or Tutorial LC with this set. If you don't get any additional actions with Eagle or if you don't generate Dahlia's Ultimate frequently enough, this set is worse than a 2pc SPD/2pc SPD combo.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">2pc SPD / 2pc SPD or BE <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">For if you don't have any good 4pcs of the above sets.</div>
+          </div>
+
+          <h4 style="margin-top:20px;">Planar Ornaments</h4>
+          <div class="rec-entry">
+            <div class="rec-name">Forge of the Kalpagni Lantern <span class="rec-tag bis">BiS</span></div>
+            <div class="rec-desc">Unconditional BiS planar since you are always implanting a Fire weakness with Dahlia. Provides the highest BE% boost (40%) out of any planar while also providing 6% SPD.</div>
+          </div>
+          <div class="rec-entry">
+            <div class="rec-name">Sprightly Vonwacq <span class="rec-tag">Alternative</span></div>
+            <div class="rec-desc">Good for frontloading actions and taking 3 actions in 150 AV of the first wave; The Dahlia needs 151.5 SPD or higher to take 3 actions within 150 AV.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">⚙</span> Trace Priority
+        </div>
+        <div class="section-body">
+          <h4>Character Traces</h4>
+          <div class="priority-item">
+            <div class="priority-rank rank-1">1</div>
+            <div class="priority-info">
+              <div class="priority-type">Ultimate</div>
+              <div class="priority-name" data-trace-type="Ultimate">Wallow... Entombed Ash</div>
+              <div class="priority-note">Affects how much DEF shred she inflicts onto enemies. High priority.</div>
+            </div>
+          </div>
+          <div class="priority-item">
+            <div class="priority-rank rank-1">1</div>
+            <div class="priority-info">
+              <div class="priority-type">Talent</div>
+              <div class="priority-name" data-trace-type="Talent">Who's Afraid of Constance?</div>
+              <div class="priority-note">Affects the Super Break multiplier that Dahlia provides to an ally. High priority.</div>
+            </div>
+          </div>
+          <div class="priority-item">
+            <div class="priority-rank rank-3">3</div>
+            <div class="priority-info">
+              <div class="priority-type">Basic ATK</div>
+              <div class="priority-name" data-trace-type="Basic ATK">Fiddle... Fissured Memory</div>
+              <div class="priority-note">Does not contribute any damage to the team. Low priority.</div>
+            </div>
+          </div>
+          <div class="priority-item">
+            <div class="priority-rank rank-3">3</div>
+            <div class="priority-info">
+              <div class="priority-type">Skill</div>
+              <div class="priority-name" data-trace-type="Skill">Lick... Enkindled Betrayal</div>
+              <div class="priority-note">Only affects her non-Break damage, which is not significant. Low priority.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="wiki-section-full">
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">👥</span> Team Suggestions
+        </div>
+        <div class="section-body">
+          <div class="team-row">
+            <div class="team-block">
+              <div class="team-label">Firefly Hypercarry</div>
+              <div class="team-slots">
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Firefly_Icon.webp" alt="Firefly"></div>
+                  <div class="team-slot-name">Firefly</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_The_Dahlia_Icon.webp" alt="The Dahlia"></div>
+                  <div class="team-slot-name">The Dahlia</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Fugue_Icon.webp" alt="Fugue"></div>
+                  <div class="team-slot-name">Fugue</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon">
+                    <img class="alt-icon" src="/images/small/Character_Lingsha_Icon.webp" alt="Lingsha">
+                    <img class="alt-icon" src="/images/small/Character_HMC_Icon.webp" alt="HMC">
+                  </div>
+                  <div class="team-slot-name">Lingsha/HMC</div>
+                  <div class="team-slot-role">Flex</div>
+                </div>
+              </div>
+              <div class="team-note">Firefly's general best overall team, with The Dahlia providing Firefly with SPD and Super Break DMG without fully breaking enemies, Fugue providing exo-toughness (which gives extra burst damage), and Lingsha as a decent toughness damage dealer for sustain, though she can be replaced with HMC or Ruan Mei in runs in which you don't need a sustain. The Dahlia is essential for Firefly (and all break DPSes), but the second support slot is fairly flexible (you can use Fugue, HMC or Ruan Mei for varying types of utility).</div>
+            </div>
+            <div class="team-block">
+              <div class="team-label">Break DPS Hypercarry</div>
+              <div class="team-slots">
+                <div class="team-slot">
+                  <div class="team-slot-icon">
+                    <img class="alt-icon" src="/images/small/Character_Rappa_Icon.webp" alt="Rappa">
+                    <img class="alt-icon" src="/images/small/Character_Boothill_Icon.webp" alt="Boothill">
+                  </div>
+                  <div class="team-slot-name">Rappa/Boothill</div>
+                  <div class="team-slot-role">DPS</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_The_Dahlia_Icon.webp" alt="The Dahlia"></div>
+                  <div class="team-slot-name">The Dahlia</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon"><img src="/images/small/Character_Fugue_Icon.webp" alt="Fugue"></div>
+                  <div class="team-slot-name">Fugue</div>
+                  <div class="team-slot-role">Support</div>
+                </div>
+                <div class="team-slot">
+                  <div class="team-slot-icon">
+                    <img class="alt-icon" src="/images/small/Character_Lingsha_Icon.webp" alt="Lingsha">
+                    <img class="alt-icon" src="/images/small/Character_HMC_Icon.webp" alt="HMC">
+                  </div>
+                  <div class="team-slot-name">Lingsha/HMC</div>
+                  <div class="team-slot-role">Flex</div>
+                </div>
+              </div>
+              <div class="team-note">The generic sustainless hypercarry core team for all Break DPSes. The Dahlia is an essential support for all break DPSes due to her ability for an ally to inflict Super Break damage without breaking enemies and WBE increase, while Fugue provides exo-toughness which is particularly useful for burst damage (or other utility like accumulating Pocket Trickshot with Boothill or Charge for Rappa). Lingsha can be replaced with HMC, given that HMC and Fugue delays enemies when enemies are weakness broken and most break DPSes can wear defensive substats, Break teams often have higher survivability than other teams, which allow them to be run sustainless more easily than other teams. At higher investment on Dahlia and Fugue, you can use Lingsha, March 7th (Hunt) or Xueyi as the break DPS instead.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="wiki-section-full">
+      <div class="section-card">
+        <div class="section-header">
+          <span class="icon">📊</span> Vertical Investment Analysis
+        </div>
+        <div class="section-body">
+          <div class="invest-grid">
+            <div class="invest-card">
+              <div class="invest-card-label">Sig LC (S1)</div>
+              <div class="invest-card-value grade-s">★★★★</div>
+              <div class="invest-card-note">About a 30% damage increase over F2P options (Tutorial LC) and provides a small QoL for SP heavy break DPSes like Firefly E0.</div>
+            </div>
+            <div class="invest-card">
+              <div class="invest-card-label">Teammates</div>
+              <div class="invest-card-value grade-a">★★★</div>
+              <div class="invest-card-note">Other than Fugue E1/S1 and Firefly E2 (and arguably Fugue E2), vertically investing into Dahlia is generally better than investing into other Break-oriented teammates.</div>
+            </div>
+            <div class="invest-card">
+              <div class="invest-card-label">E1</div>
+              <div class="invest-card-value grade-s">★★★★</div>
+              <div class="invest-card-note">About a 25-30% team damage increase over E0, enables all allies to do Super Break damage without breaking while increasing Dahlia and her Dance Partner's Super Break multiplier by 40%, and the value of the toughness damage reduction depends on the fight itself (better against a multi-phase boss with a lot of toughness vs. multiple small enemies).</div>
+            </div>
+            <div class="invest-card">
+              <div class="invest-card-label">E2</div>
+              <div class="invest-card-value grade-s">★★★★</div>
+              <div class="invest-card-note">A 20% team damage increase minimum, though the immediate weakness implant of Dahlia's Dance Partner on all enemies can be very useful for DPSes who cannot immediately implant (or implant at all) their own element like Boothill or Rappa.</div>
+            </div>
+          </div>
+
+          <div class="invest-summary">
+            <h4>Investment Recommendation</h4>
+            <p>The Dahlia is already a complete unit at E0S0, but E1 and S1 are great improvements for any Break team, and E2 can be particularly strong for non-Firefly break DPSes. Firefly E0S0 + Dahlia E0S1/E1S0 + Fugue E1S0/E0S1 should be more than capable of clearing most endgame content at the moment, though you would need higher vertical investment on Dahlia and Fugue to have similar performance with E0S1 Rappa or Boothill instead.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let showingE0S1 = false;
+    function toggleStats() {
+      const toggle = document.getElementById('statToggle');
+      const label = document.getElementById('statToggleLabel');
+      const current = showingE0S1 ? document.getElementById('statsE0S1') : document.getElementById('statsE0S0');
+      const next = showingE0S1 ? document.getElementById('statsE0S0') : document.getElementById('statsE0S1');
+      showingE0S1 = !showingE0S1;
+      toggle.classList.toggle('active', showingE0S1);
+      label.textContent = showingE0S1 ? '5* E0S1 / 4* E6S5' : 'E0S0';
+      current.classList.add('fading-out');
+      setTimeout(() => {
+        current.classList.add('hidden');
+        current.classList.remove('fading-out');
+        next.classList.remove('hidden');
+        next.classList.add('fading-in');
+        void next.offsetWidth;
+        next.classList.remove('fading-in');
+      }, 300);
+    }
+  </script>
+</body>
+</html>
